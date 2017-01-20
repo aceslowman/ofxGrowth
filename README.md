@@ -1,7 +1,9 @@
-# beginners-growth
-Procedural plant experiments
+# ofxGrowth
+Openframeworks addon for exploring procedural growth patterns.
 
-Before I begin exploring L-Systems, I want to see if I can mimic plant growth similar to what I might draw by hand.
+Based primarily on hand-drawn processes, exploring plant growth. This addon is meant to be
+abstracted enough that it can be used for naiive simulations of capillary action, plant growth,
+ant-hill structures, etc, and the language used will be tweaked to match that purpose.
 
 ---
 
@@ -14,7 +16,6 @@ Before I begin exploring L-Systems, I want to see if I can mimic plant growth si
   * For each new branch, create a corresponding mesh for display.
 3. Loop through all created branches
   * Apply coloring
-  * Change drawing mode to TRIANGLE_FAN for all branches belonging to levels above the LEAF_LEVEL
 
 ---
 
@@ -39,183 +40,62 @@ Before I begin exploring L-Systems, I want to see if I can mimic plant growth si
 
 ## Methods
 
-This is something I need to put a lot of thought into.
-
-I need to be able to just create a branch, in the main.cpp file. All I pass to that branch is it's parameters, or just the ones necessary.
+The core generative methods are:
 
 ```
-  setup();
-  update();
-  draw();
-```  
-
-Within setup, I need to set all of my defaults. All of these should be normalized, 0 - 1. With that said, a few of these have no maximum, so some sort of limit will need to be implemented, particularly segments and depth.
-
-```
-void Growth::setup(){
-  this->density      = ofRandomuf();
-  this->length       = ofRandomuf();
-  this->segments     = ofRandom(10);
-  this->depth        = ofRandom(10);
-  this->leaf_level   = ofRandom(10);
-  this->straightness = ofRandomuf();
-}
+void setupBranches();
+ofMesh generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
 ```
 
-I also want to make sure that the method between leaves and branches stay as similar as possible. All will use an ofMesh class.
+The structure underlying all of this is the vector that organizes the branches. The format it takes is:
 
-This also brings me to the issue of leaves. It seems important to have some separate handling of leaves, but most of the methods will be the same. *Maybe* this means that I shouldn't extend ofMesh, instead have the Growth class own ofMesh objects.
+vector< vector<ofMesh> > branches;
 
-* There is a branch
-* The branch has leaves
-* LATER: A tree has branches, each of which have leaves.
+## setupBranches()
+
+setupBranches() is currently being used to control the overall recursion of the sequence. Within this method, the core branch is generated, and then generateBranch() is called to recursively, for each level of depth, and also for each node within each branch.
+
+Description of the main recursion:
 
 ```
-class Growth : public ofMesh {
+create initial, core branch
 
-  public:
-
-    void setup();
-    void update();
-    void draw();
-
-    void generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
-    void setupBranch();
-
-    float density;
-    float length;
-    int   segments;
-    int   depth;
-    int   leaf_level;
-    float straightness;
-
-    float f_dim; //diminishment factor, size of growth in subsequent levels
-
-    ofMesh branch;
-    vector<ofMesh> leaves;
-}
+for each level of depth (current_level)
+  for each branch in the current_level (current_branch)
+    for each node in the current_branch (current_node)
+      if the current_level isn't the maximum level (since we are adding new branches for each level, stop)
+        add a branch to the temporary vector<ofMesh>, if probability allows
+  push back the entire level of branches (creating current_level + 1)
 ```
-
-Essentially, I think if we go beyond a certain number of levels (leaf_level), then we will switch to placing this mesh within a vector, instead of appending it onto the preexisting branch.
 
 ## generateBranch()
 
-The generateBranch() method is going to do the bulk of the actual construction. For generateBranch() to work, we need to know a few things.
-
-1. Where did the growth start? The root? The node on a branch before it?
-2. What is the initial vector? Which direction was this growth pointing?
-3. What level of recursion are we at?
-
-I then need to get a few pieces of information for this specific iteration. Every level deeper we go, some things change.
-
-* Branches become shorter, and consist of less segments. (t_length, t_segments)
-
-These will be dictated by some sort of factor affecting how fast subsequent branches shrink in size.
-
-The factor is f_dim, I want it to be -1 - 1, with the maximum being some hardcoded limit in small or large sizes.
-
-This is going to be implemented with `pow(f_dim,level)`
+generateBranch() controls the actual construction of the branch, and contains a bulk of the
+actual logic. The method returns an ofMesh object, to be added to the branches vector.
 
 ```
-//Diminish parameters
-int t_segments = this->segments * pow(f_dim,level);
-float t_length = this->length   * pow(f_dim,level);
+create a temporary branch to manipulate
+
+add a point to the location of the node we are building off of (origin)
+
+calculate diminished segment count, and diminished length
+
+for each segment
+  calculate a random point, loosely aligned with the previous growth vector with a random length, constrained by
+  the diminished length value
+
+  add vertex to the temporary branch mesh
+
+  update growth vector for next iteration
+
+method returns the temporary branch
 ```
 
-Now, to actually work through the cycle, I need to calculate the point for step 1. t_point is the vector, times the length (which is random, with t_length as the maximum), plus the previous t_point.
+## generateLeaf() (remove)
 
-```
-t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
-```
+Currently there is a method for leaf generation, but this isn't entirely necessary for the functioning of a more
+abstracted growth generation class. This needs to be moved.
 
-After everything else is calculated, at the end of the loop I need to prepare the new semi-random vector. The vector is the previous vector, plus a random direction, -1 to 1, diminished by a degree of smoothness.
+## examples
 
-```
-t_vec = ofVec3f(
-  ofClamp(t_vec.x + (ofRandomf() * straightness),0.0,1.0),
-  ofClamp(t_vec.y + (ofRandomf() * straightness),0.0,1.0),
-  ofClamp(t_vec.z + (ofRandomf() * straightness),0.0,1.0)
-);
-```
-
-```
-void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
-    ofPath t_path;
-
-    this->moveTo(origin);
-
-    //Diminish parameters
-    int t_segments = this->segments * pow(f_dim,level);
-    float t_length = this->length   * pow(f_dim,level);
-
-    //Initialize vector and point
-    ofVec3f t_vec = initial_vector;
-    ofVec3f t_point = origin;
-
-    //begin assembling one cycle of sequence
-    for(int i = 0; i < t_segments; i++){
-
-        t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
-
-        this->lineTo(t_point);
-
-        t_vec = ofVec3f(
-                        ofClamp(t_vec.x + (ofRandomf() * straightness),0.0,1.0),
-                        ofClamp(t_vec.y + (ofRandomf() * straightness),0.0,1.0),
-                        ofClamp(t_vec.z + (ofRandomf() * straightness),0.0,1.0)
-                        );
-    }
-
-    this->newSubPath();
-}
-```
-
-## setupBranch()
-
-I need some kind of controller for the recursion. Maybe there is a more efficient method that I could use to get some sort of self-contained function for generateBranch, but setupBranch() will work as that for now.
-
-setupBranch() will call to generateBranch, within loops. Essentially, loop through every existing branch, and use probability to choose which branches will beget new branches.
-
-First, begin looping through the first level.
-Then, loop through every node in that branch.
-If the odds are that the current node is selected, generate a new branch.
-
-How do I target individual branches, in the same way I did for ofPath?
-
-```
-void Growth::setupBranch(){
-
-    ofVec3f initial_vector = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
-
-    generateBranch(this->origin, initial_vector, 0);
-
-    int current_branch = 1;
-    int current_level  = 1;
-
-    for(int i = 0; i <= this->depth; i++){
-
-        for(int j = 0; j < current_branch; j++){
-
-            for(int k = 0; k < this->getOutline()[i].size(); k++){
-                ofVec3f current_node_position = this->getOutline()[i].getPointAtIndexInterpolated(k);
-                ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
-
-                if(ofRandomuf() < this->density){
-                    generateBranch(current_node_position, t_vec, current_level);
-                }
-            }
-            current_branch++;
-        }
-        current_level++;
-    }
-}
-```
-
-## The issue with ofMesh creation, instead of ofPath
-
-I am starting to question creating the mesh throughout the process. I think that this might be a misunderstanding of the purpose of ofPath and ofMesh individually, but if I was to use ofPath, with meticulously managed indices and hierarchies, THEN, create a seperate set of methods to handle meshing the paths, with it's own level logic and attention to depth.
-
-I think this actually might be better, now that I'm seeing that the use of ofMesh won't really allow me to say, loop through all individual branches seperately. There just wouldn't be the logic present in the mesh. Rewriting the generateBranch section, then the setupBranch section.
----
-
-  ![Screenshot](../images/basic-sequence.png?raw=true)
+![Branches](examples/branches.jpg?raw=true)

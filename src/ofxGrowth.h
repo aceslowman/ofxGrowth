@@ -5,7 +5,7 @@
 class Growth {
 
 public:
-    
+
     void setup();
     void update();
     void drawPoints();
@@ -13,7 +13,13 @@ public:
     void drawLeaves();
     void drawDebug();
     void clearAll();
-    
+
+    void setupBranches();
+    ofMesh generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
+    ofPath generateLeaf(ofPolyline poly, int level);
+
+    void colorMesh(int coloring_type);
+
     void setDensity(float density);
     void setLength(float length);
     void setScale(float scale);
@@ -22,18 +28,11 @@ public:
     void setLeafLevel(int leaf_level);
     void setCrookedness(float crookedness);
     void setColormode(int color_mode);
-    
-    void colorMesh(int coloring_type);
-    
-    void setupBranches();
-    void setupLeaves();
-    ofMesh generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
-    ofPath generateLeaf(ofPolyline poly, int level);
-    
+
     Growth();
-    
+
 private:
-    
+
     float   density;
     float   length;
     float   scale;
@@ -44,9 +43,9 @@ private:
     int     color_mode;
     ofVec3f origin;
     ofVec3f growth_vector;
-    
+
     float f_dim;
-    
+
     /*
      branches[level][branch_id]
      */
