@@ -31,11 +31,12 @@ ant-hill structures, etc, and the language used will be tweaked to match that pu
   * *How deep does the recursion go?*
 * **Crookedness**
   * *How constrained are the points on the branch to a particular vector?*
-* **Leaf Width**
-  * *How wide is the leaf?*
-  * *What is the theta between the two sides of a leaf?*
-* **Leaf Level**
-  * *At what point do we begin seeing leaves?*
+* ~~**Leaf Width**~~
+  * ~~*How wide is the leaf?*~~
+  * ~~*What is the angle between the two sides of a leaf?*~~
+* ~~**Leaf Level**~~
+  * ~~*At what point do we begin seeing leaves?*~~
+
 ---
 
 ## Methods
