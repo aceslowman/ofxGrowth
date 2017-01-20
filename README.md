@@ -1,4 +1,7 @@
 # ofxGrowth
+
+![Branches](examples/branches.jpg?raw=true)
+
 Openframeworks addon for exploring procedural growth patterns.
 
 Based primarily on hand-drawn processes, exploring plant growth. This addon is meant to be
@@ -50,7 +53,9 @@ ofMesh generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
 
 The structure underlying all of this is the vector that organizes the branches. The format it takes is:
 
+```
 vector< vector<ofMesh> > branches;
+```
 
 ## setupBranches()
 
@@ -96,7 +101,3 @@ method returns the temporary branch
 
 Currently there is a method for leaf generation, but this isn't entirely necessary for the functioning of a more
 abstracted growth generation class. This needs to be moved.
-
-## examples
-
-![Branches](examples/branches.jpg?raw=true)
