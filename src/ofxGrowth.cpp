@@ -2,7 +2,7 @@
 
 
 //--------------------------------------------------------------
-Growth::Growth(){
+ofxGrowth::ofxGrowth(){
     this->density       = 0.2;
     this->length        = 0.7;
     this->scale         = 60;
@@ -14,18 +14,21 @@ Growth::Growth(){
     this->f_dim         = 0.5;
     this->color_mode    = 1;
     this->growth_vector = ofVec3f(0,1,0);
+    
+    this->dim_strokewidth = false;
 
     glPointSize(8);
 }
 
 //--------------------------------------------------------------
-void Growth::setup(){
+void ofxGrowth::setup(){
     setupBranches();
+    updateNodeSize();
     colorMesh(this->color_mode);
 }
 
 //--------------------------------------------------------------
-void Growth::colorMesh(int coloring_type){
+void ofxGrowth::colorMesh(int coloring_type){
     switch (coloring_type) {
         case 0: //color for each branch
             
@@ -107,7 +110,7 @@ void Growth::colorMesh(int coloring_type){
 }
 
 //--------------------------------------------------------------
-void Growth::setupBranches(){
+void ofxGrowth::setupBranches(){
     vector<ofMesh> t_branches;
     
     ofVec3f initial_vector = this->growth_vector;
@@ -153,7 +156,7 @@ void Growth::setupBranches(){
 }
 
 //--------------------------------------------------------------
-ofMesh Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
+ofMesh ofxGrowth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
     ofMesh t_branch;
     t_branch.setMode(OF_PRIMITIVE_LINE_STRIP);
     t_branch.setupIndicesAuto();
@@ -190,7 +193,7 @@ ofMesh Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level)
 }
 
 //--------------------------------------------------------------
-ofPath Growth::generateLeaf(ofPolyline poly, int level){
+ofPath ofxGrowth::generateLeaf(ofPolyline poly, int level){
     ofMesh t_leaf;
     ofPath t_path, t_path_mirrored;
     
@@ -221,7 +224,7 @@ ofPath Growth::generateLeaf(ofPolyline poly, int level){
 }
 
 //--------------------------------------------------------------
-void Growth::drawPoints(){
+void ofxGrowth::drawPoints(){
     for(int i = 0; i < branches.size(); i++){
         for(int j = 0; j < branches[i].size(); j++){
             branches[i][j].setMode(OF_PRIMITIVE_POINTS);
@@ -231,13 +234,16 @@ void Growth::drawPoints(){
 }
 
 //--------------------------------------------------------------
-void Growth::drawMeshes(){
+void ofxGrowth::drawMeshes(){
     for(int i = 0; i < branches.size(); i++){
-        //for each level, set the thickness to a diminishing value
-        float t_width = (10) * pow(this->f_dim,i);
+        int t_width = 1;
         
+        if(this->dim_strokewidth)
+            t_width = (10) * pow(this->f_dim,i);
+            
         for(int j = 0; j < branches[i].size(); j++){
             glLineWidth(t_width);
+            
             branches[i][j].setMode(OF_PRIMITIVE_LINE_STRIP);
             branches[i][j].draw();
         }
@@ -245,18 +251,17 @@ void Growth::drawMeshes(){
 }
 
 //--------------------------------------------------------------
-void Growth::drawLeaves(){
+void ofxGrowth::drawLeaves(){
     for(int i = this->leaf_level; i < leaves.size(); i++){
         for(int j = 0; j < leaves[i].size(); j++){
             leaves[i][j].setFilled(true);
-//            leaves[i][j].setStrokeWidth(1);
             leaves[i][j].draw();
         }
     }
 }
 
 //--------------------------------------------------------------
-void Growth::drawDebug(){
+void ofxGrowth::drawDebug(){
     for(int i = 0; i < branches.size(); i++){
         for(int j = 0; j < branches[i].size(); j++){
             for(int k = 0; k < branches[i][j].getVertices().size(); k++){
@@ -271,16 +276,33 @@ void Growth::drawDebug(){
 }
 
 //--------------------------------------------------------------
-void Growth::clearAll(){
+void ofxGrowth::clearAll(){
     branches.clear();
     leaves.clear();
 }
 
-void Growth::setDensity(float density){this->density = density;}
-void Growth::setLength(float length){this->length = length;}
-void Growth::setScale(float scale){this->scale = scale;}
-void Growth::setSegments(int segments){this->segments = segments;}
-void Growth::setDepth(int depth){this->depth = depth;}
-void Growth::setLeafLevel(int leaf_level){this->leaf_level = leaf_level;}
-void Growth::setCrookedness(float crookedness){this->crookedness = crookedness;}
-void Growth::setColormode(int color_mode){this->color_mode = color_mode;colorMesh(color_mode);}
+//--------------------------------------------------------------
+void ofxGrowth::updateNodeSize(){
+    this->node_size = 0;
+    
+    for(int current_level = 0; current_level < branches.size(); current_level++){
+        for(int current_branch = 0; current_branch < branches[current_level].size(); current_branch++){
+            for(int current_node = 0; branches[current_level][current_branch].getVertices().size(); current_node++){
+                this->node_size++;
+            }
+        }
+        
+    }
+    
+}
+
+void ofxGrowth::setDensity(float density){this->density = density;}
+void ofxGrowth::setLength(float length){this->length = length;}
+void ofxGrowth::setScale(float scale){this->scale = scale;}
+void ofxGrowth::setSegments(int segments){this->segments = segments;}
+void ofxGrowth::setDepth(int depth){this->depth = depth;}
+void ofxGrowth::setLeafLevel(int leaf_level){this->leaf_level = leaf_level;}
+void ofxGrowth::setCrookedness(float crookedness){this->crookedness = crookedness;}
+void ofxGrowth::setColormode(int color_mode){this->color_mode = color_mode;colorMesh(color_mode);}
+
+int ofxGrowth::getNodeSize(){ return this->node_size; }

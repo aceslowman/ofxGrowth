@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-class Growth {
+class ofxGrowth {
 
 public:
 
@@ -19,6 +19,8 @@ public:
     ofPath generateLeaf(ofPolyline poly, int level);
 
     void colorMesh(int coloring_type);
+    void updateNodeSize();
+    int  getNodeSize();
 
     void setDensity(float density);
     void setLength(float length);
@@ -28,8 +30,16 @@ public:
     void setLeafLevel(int leaf_level);
     void setCrookedness(float crookedness);
     void setColormode(int color_mode);
+    
+    /*
+     branches[level][branch_id]
+     */
+    vector< vector<ofMesh> > branches;
+    vector< vector<ofPath> > leaves;
+    
+    int node_size;
 
-    Growth();
+    ofxGrowth();
 
 private:
 
@@ -43,12 +53,10 @@ private:
     int     color_mode;
     ofVec3f origin;
     ofVec3f growth_vector;
+    
+    
+    
+    bool dim_strokewidth;
 
     float f_dim;
-
-    /*
-     branches[level][branch_id]
-     */
-    vector< vector<ofMesh> > branches;
-    vector< vector<ofPath> > leaves;
 };
