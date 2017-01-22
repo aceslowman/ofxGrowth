@@ -19,7 +19,7 @@ public:
     ofPath generateLeaf(ofPolyline poly, int level);
 
     void colorMesh(int coloring_type);
-    void updateNodeSize();
+//    void updateNodeSize();
     int  getNodeSize();
 
     void setDensity(float density);

@@ -14,7 +14,6 @@ ofxGrowth::ofxGrowth(){
     this->f_dim         = 0.5;
     this->color_mode    = 1;
     this->growth_vector = ofVec3f(0,1,0);
-    
     this->dim_strokewidth = false;
 
     glPointSize(8);
@@ -22,8 +21,10 @@ ofxGrowth::ofxGrowth(){
 
 //--------------------------------------------------------------
 void ofxGrowth::setup(){
+    this->node_size = 0;
+
     setupBranches();
-    updateNodeSize();
+//    updateNodeSize();
     colorMesh(this->color_mode);
 }
 
@@ -100,6 +101,17 @@ void ofxGrowth::colorMesh(int coloring_type){
                 for(int j = 0; j < leaves[i].size(); j++){
                     
                     leaves[i][j].setFillColor(branch_color);
+                }
+            }
+            
+            break;
+        case 3: //All branches black, with no opacity. Empty.
+            
+            for(int i = 0; i < branches.size(); i++){
+                for(int j = 0; j < branches[i].size(); j++){
+                    for(int k = 0; k < branches[i][j].getVertices().size(); k++){
+                        branches[i][j].setColor(k, ofColor(0,0,0,0));
+                    }
                 }
             }
             
@@ -187,6 +199,8 @@ ofMesh ofxGrowth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int lev
             ofClamp(t_vec.y + (ofRandomf() * this->crookedness),-1.0,1.0),
             ofClamp(t_vec.z + (ofRandomf() * this->crookedness),-1.0,1.0)
         );
+        
+        this->node_size++;
     }
     
     return t_branch;
@@ -236,7 +250,7 @@ void ofxGrowth::drawPoints(){
 //--------------------------------------------------------------
 void ofxGrowth::drawMeshes(){
     for(int i = 0; i < branches.size(); i++){
-        int t_width = 1;
+        int t_width = 2;
         
         if(this->dim_strokewidth)
             t_width = (10) * pow(this->f_dim,i);
@@ -281,20 +295,20 @@ void ofxGrowth::clearAll(){
     leaves.clear();
 }
 
-//--------------------------------------------------------------
-void ofxGrowth::updateNodeSize(){
-    this->node_size = 0;
-    
-    for(int current_level = 0; current_level < branches.size(); current_level++){
-        for(int current_branch = 0; current_branch < branches[current_level].size(); current_branch++){
-            for(int current_node = 0; branches[current_level][current_branch].getVertices().size(); current_node++){
-                this->node_size++;
-            }
-        }
-        
-    }
-    
-}
+////--------------------------------------------------------------
+//void ofxGrowth::updateNodeSize(){
+//    this->node_size = 0;
+//    
+//    for(int current_level = 0; current_level < branches.size(); current_level++){
+//        for(int current_branch = 0; current_branch < branches[current_level].size(); current_branch++){
+//            for(int current_node = 0; branches[current_level][current_branch].getVertices().size(); current_node++){
+//                this->node_size++;
+//            }
+//        }
+//        
+//    }
+//    
+//}
 
 void ofxGrowth::setDensity(float density){this->density = density;}
 void ofxGrowth::setLength(float length){this->length = length;}
