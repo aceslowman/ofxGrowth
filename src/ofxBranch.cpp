@@ -1,7 +1,7 @@
-#include "ofxGrowthBranch.h"
+#include "ofxBranch.h"
 
 //--------------------------------------------------------------
-ofxGrowthBranch::ofxGrowthBranch(){
+ofxBranch::ofxBranch(){
     this->density       = 0.2;
     this->length        = 0.7;
     this->scale         = 60;
@@ -19,13 +19,25 @@ ofxGrowthBranch::ofxGrowthBranch(){
 }
 
 //--------------------------------------------------------------
-void ofxGrowthBranch::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
+ofxBranch::~ofxBranch(){
+    nodes.clear();
+}
+
+//--------------------------------------------------------------
+void ofxBranch::generateBranch(ofNode *parent, ofVec3f origin, ofVec3f initial_vector, int level){
     ofMesh t_branch;
+    shared_ptr<ofNode> t_node(new ofNode());
+    
     t_branch.setMode(OF_PRIMITIVE_LINE_STRIP);
     t_branch.setupIndicesAuto();
     
     t_branch.addIndex(0);
+    t_branch.addColor(ofFloatColor(0));
     t_branch.addVertex(origin);
+    t_node->setPosition(origin);
+    t_node->setParent(*parent);
+    
+    nodes.push_back(t_node);
     
     //Diminish parameters
     int t_segments = this->segments;
@@ -44,22 +56,25 @@ void ofxGrowthBranch::generateBranch(ofVec3f origin, ofVec3f initial_vector, int
         t_branch.addIndex(i);
         t_branch.addColor(ofFloatColor(0));
         t_branch.addVertex(t_point);
+        t_node->setPosition(t_point);
+        t_node->setParent(*parent);
+        
+        nodes.push_back(t_node);
         
         t_vec = ofVec3f(
             ofClamp(t_vec.x + (ofRandomf() * this->crookedness),-1.0,1.0),
             ofClamp(t_vec.y + (ofRandomf() * this->crookedness),-1.0,1.0),
             ofClamp(t_vec.z + (ofRandomf() * this->crookedness),-1.0,1.0)
         );
-        
     }
     
     getMesh() = t_branch;
 }
 
-void ofxGrowthBranch::setDensity(float density){this->density = density;}
-void ofxGrowthBranch::setLength(float length){this->length = length;}
-void ofxGrowthBranch::setScale(float scale){this->scale = scale;}
-void ofxGrowthBranch::setSegments(int segments){this->segments = segments;}
-void ofxGrowthBranch::setDepth(int depth){this->depth = depth;}
-void ofxGrowthBranch::setLeafLevel(int leaf_level){this->leaf_level = leaf_level;}
-void ofxGrowthBranch::setCrookedness(float crookedness){this->crookedness = crookedness;}
+void ofxBranch::setDensity(float density){this->density = density;}
+void ofxBranch::setLength(float length){this->length = length;}
+void ofxBranch::setScale(float scale){this->scale = scale;}
+void ofxBranch::setSegments(int segments){this->segments = segments;}
+void ofxBranch::setDepth(int depth){this->depth = depth;}
+void ofxBranch::setLeafLevel(int leaf_level){this->leaf_level = leaf_level;}
+void ofxBranch::setCrookedness(float crookedness){this->crookedness = crookedness;}

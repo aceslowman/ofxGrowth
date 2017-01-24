@@ -1,19 +1,16 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGrowthBranch.h"
+#include "ofxBranch.h"
 
 class ofxGrowth{
 
 public:
     ofxGrowth();
-    
-    void draw();
-    
-    void setupBranches();
-    void addChild(ofxGrowthBranch branch);
 
     void setup();
+    void setupBranches();
+    void draw();
 
     void setDensity(float density);
     void setLength(float length);
@@ -24,7 +21,10 @@ public:
     void setCrookedness(float crookedness);
     void setColormode(int color_mode);
     
-    vector<ofxGrowthBranch> branches;
+    vector<shared_ptr<ofxBranch>> branches;
+    vector<ofMesh> meshes;
+    
+    ofNode seed;
 
 private:
 

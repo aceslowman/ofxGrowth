@@ -2,11 +2,15 @@
 
 #include "ofMain.h"
 
-class ofxGrowthBranch : public of3dPrimitive{
+class ofxBranch : public of3dPrimitive{
 
 public:
+    ofxBranch();
+    virtual ~ofxBranch();
+    
+    vector<shared_ptr<ofNode>> nodes;
 
-    void generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
+    void generateBranch(ofNode *parent, ofVec3f origin, ofVec3f initial_vector, int level);
 
     void setDensity(float density);
     void setLength(float length);
@@ -16,8 +20,6 @@ public:
     void setLeafLevel(int leaf_level);
     void setCrookedness(float crookedness);
     void setColormode(int color_mode);
-
-    ofxGrowthBranch();
 
 private:
 

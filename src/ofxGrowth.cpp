@@ -14,60 +14,38 @@ ofxGrowth::ofxGrowth(){
     this->color_mode    = 1;
     this->growth_vector = ofVec3f(0,1,0);
     this->dim_strokewidth = false;
+    
+    seed.setPosition(this->origin);
 }
 
 //--------------------------------------------------------------
 void ofxGrowth::setup(){
     setupBranches();
-    
 }
 
 //--------------------------------------------------------------
 void ofxGrowth::setupBranches(){
     ofVec3f initial_vector = this->growth_vector;
     
-    ofxGrowthBranch initial_branch;
-    initial_branch.generateBranch(this->origin, initial_vector, 0);
-    
+    shared_ptr<ofxBranch> initial_branch(new ofxBranch());
     branches.push_back(initial_branch);
-
-    for(int i = 0; i < branches[0].getMesh().getNumVertices(); i++){
-        ofVec3f node_position = branches[0].getMesh().getVertices()[i];
-        ofxGrowthBranch t_branch;
-        
-        ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
-        t_branch.generateBranch(node_position, t_vec, 1);
-        
-        t_branch.setParent(initial_branch);
+    
+    branches[0]->generateBranch(&seed, this->origin, initial_vector, 0);
+    
+    for(int i = 0; i < branches[0]->nodes.size(); i++){
+        shared_ptr<ofxBranch> t_branch(new ofxBranch());
         branches.push_back(t_branch);
+        
+        ofVec3f node_position = branches[0]->getMesh().getVertices()[i];
+        ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
+        
+        branches.back()->generateBranch(branches[0]->nodes[i].get(), node_position, t_vec, 1);
     }
-//    
-//    
-//    for(int current_level = 0; current_level <= this->depth; current_level++){
-//        
-//        for(int current_branch = 0; current_branch < branches.size(); current_branch++){
-//            
-//            if(current_level != this->depth){
-//                for(int current_node = 0; current_node < branches[current_level][current_branch].getVertices().size(); current_node++){
-//                    
-//                    ofVec3f current_node_position = branches[current_level][current_branch].getVertex(current_node);
-//                    ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
-//                    
-//                    if(ofRandomuf() < this->density){
-//                        ofMesh t_branch = generateBranch(current_node_position, t_vec, current_level+1);
-//                        addChild(t_branch);
-//                    }
-//                }
-//            }
-//        }
-//        branches.push_back(t_branches);
-//    }
 }
 
 void ofxGrowth::draw(){
     for(int i = 0; i < branches.size(); i++){
-        branches[i].draw();
-        
+        branches[i]->draw();
     }
 }
 
