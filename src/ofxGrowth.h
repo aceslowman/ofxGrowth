@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-class ofxGrowth {
+class ofxGrowth : public of3dPrimitive{
 
 public:
 

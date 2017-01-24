@@ -158,12 +158,12 @@ void ofxGrowth::setupBranches(){
             }
             
             if(current_level >= this->leaf_level){
-                ofPath t_leaf = generateLeaf(branches[current_level][current_branch].getVertices(),current_level+1);
-                t_leaves.push_back(t_leaf);
+//                ofPath t_leaf = generateLeaf(branches[current_level][current_branch].getVertices(),current_level+1);
+//                t_leaves.push_back(t_leaf);
             }
         }
         branches.push_back(t_branches);
-        leaves.push_back(t_leaves);
+//        leaves.push_back(t_leaves);
     }
 }
 
@@ -250,7 +250,7 @@ void ofxGrowth::drawPoints(){
 //--------------------------------------------------------------
 void ofxGrowth::drawMeshes(){
     for(int i = 0; i < branches.size(); i++){
-        int t_width = 2;
+        int t_width = 1;
         
         if(this->dim_strokewidth)
             t_width = (10) * pow(this->f_dim,i);
