@@ -19,6 +19,11 @@ ofxGrowth::ofxGrowth(){
 }
 
 //--------------------------------------------------------------
+ofxGrowth::~ofxGrowth(){
+    branches.clear();
+}
+
+//--------------------------------------------------------------
 void ofxGrowth::setup(){
     setupBranches();
 }
@@ -30,7 +35,7 @@ void ofxGrowth::setupBranches(){
     shared_ptr<ofxBranch> initial_branch(new ofxBranch());
     branches.push_back(initial_branch);
     
-    branches[0]->generateBranch(&seed, this->origin, initial_vector, 0);
+    branches[0]->generateBranch(&seed, initial_vector, 0);
     
     for(int i = 0; i < branches[0]->nodes.size(); i++){
         shared_ptr<ofxBranch> t_branch(new ofxBranch());
@@ -39,8 +44,16 @@ void ofxGrowth::setupBranches(){
         ofVec3f node_position = branches[0]->getMesh().getVertices()[i];
         ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
         
-        branches.back()->generateBranch(branches[0]->nodes[i].get(), node_position, t_vec, 1);
+        branches.back()->generateBranch(branches[0]->nodes[i].get(), t_vec, 1);
+        branches.back()->setParent(*branches[0].get());
     }
+    
+    std::set<ofNode*> t_children = branches[0]->getChildren();
+    
+    for (set<ofNode*>::iterator i = t_children.begin(); i != t_children.end(); i++) {
+        auto element = *i;
+    }
+    
 }
 
 void ofxGrowth::draw(){

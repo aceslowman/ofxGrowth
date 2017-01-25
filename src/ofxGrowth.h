@@ -7,6 +7,7 @@ class ofxGrowth{
 
 public:
     ofxGrowth();
+    ~ofxGrowth();
 
     void setup();
     void setupBranches();
@@ -22,7 +23,6 @@ public:
     void setColormode(int color_mode);
     
     vector<shared_ptr<ofxBranch>> branches;
-    vector<ofMesh> meshes;
     
     ofNode seed;
 

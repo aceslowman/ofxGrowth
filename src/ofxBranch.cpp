@@ -24,7 +24,9 @@ ofxBranch::~ofxBranch(){
 }
 
 //--------------------------------------------------------------
-void ofxBranch::generateBranch(ofNode *parent, ofVec3f origin, ofVec3f initial_vector, int level){
+void ofxBranch::generateBranch(ofNode *parent, ofVec3f initial_vector, int level){
+    origin = parent->getPosition();
+    
     ofMesh t_branch;
     shared_ptr<ofNode> t_node(new ofNode());
     
@@ -50,6 +52,8 @@ void ofxBranch::generateBranch(ofNode *parent, ofVec3f origin, ofVec3f initial_v
     
     //begin assembling one cycle of sequence
     for(int i = 1; i < t_segments; i++){
+        shared_ptr<ofNode> t_node(new ofNode());
+        
         float t_length_rand = ( t_length * ofRandomuf() );
         t_point = t_point + (t_vec *  t_length_rand);
         
