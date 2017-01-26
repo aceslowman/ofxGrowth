@@ -24,8 +24,8 @@ ofxBranch::~ofxBranch(){
 }
 
 //--------------------------------------------------------------
-void ofxBranch::generateBranch(ofNode *parent, ofVec3f initial_vector, int level){
-    origin = parent->getPosition();
+void ofxBranch::generateBranch(ofNode *parent_branch, ofNode *parent_node, ofVec3f initial_vector, int level){
+    origin = parent_node->getPosition();
     
     ofMesh t_branch;
     shared_ptr<ofNode> t_node(new ofNode());
@@ -37,7 +37,8 @@ void ofxBranch::generateBranch(ofNode *parent, ofVec3f initial_vector, int level
     t_branch.addColor(ofFloatColor(0));
     t_branch.addVertex(origin);
     t_node->setPosition(origin);
-    t_node->setParent(*parent);
+    
+    t_node->setParent(*parent_branch);
     
     nodes.push_back(t_node);
     
@@ -61,7 +62,8 @@ void ofxBranch::generateBranch(ofNode *parent, ofVec3f initial_vector, int level
         t_branch.addColor(ofFloatColor(0));
         t_branch.addVertex(t_point);
         t_node->setPosition(t_point);
-        t_node->setParent(*parent);
+        
+        t_node->setParent(*parent_branch);
         
         nodes.push_back(t_node);
         

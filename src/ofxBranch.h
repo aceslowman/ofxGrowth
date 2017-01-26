@@ -10,7 +10,7 @@ public:
     
     vector<shared_ptr<ofNode>> nodes;
 
-    void generateBranch(ofNode *parent, ofVec3f initial_vector, int level);
+    void generateBranch(ofNode *parent_branch, ofNode *parent_node, ofVec3f initial_vector, int level);
 
     void setDensity(float density);
     void setLength(float length);
