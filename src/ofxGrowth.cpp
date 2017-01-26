@@ -21,10 +21,7 @@ ofxGrowth::ofxGrowth(){
 
 //--------------------------------------------------------------
 void ofxGrowth::setup(){
-    this->node_size = 0;
-
     setupBranches();
-//    updateNodeSize();
     colorMesh(this->color_mode);
 }
 
@@ -295,21 +292,6 @@ void ofxGrowth::clearAll(){
     leaves.clear();
 }
 
-////--------------------------------------------------------------
-//void ofxGrowth::updateNodeSize(){
-//    this->node_size = 0;
-//    
-//    for(int current_level = 0; current_level < branches.size(); current_level++){
-//        for(int current_branch = 0; current_branch < branches[current_level].size(); current_branch++){
-//            for(int current_node = 0; branches[current_level][current_branch].getVertices().size(); current_node++){
-//                this->node_size++;
-//            }
-//        }
-//        
-//    }
-//    
-//}
-
 void ofxGrowth::setDensity(float density){this->density = density;}
 void ofxGrowth::setLength(float length){this->length = length;}
 void ofxGrowth::setScale(float scale){this->scale = scale;}
@@ -318,5 +300,3 @@ void ofxGrowth::setDepth(int depth){this->depth = depth;}
 void ofxGrowth::setLeafLevel(int leaf_level){this->leaf_level = leaf_level;}
 void ofxGrowth::setCrookedness(float crookedness){this->crookedness = crookedness;}
 void ofxGrowth::setColormode(int color_mode){this->color_mode = color_mode;colorMesh(color_mode);}
-
-int ofxGrowth::getNodeSize(){ return this->node_size; }
