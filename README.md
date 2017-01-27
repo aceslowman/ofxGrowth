@@ -8,6 +8,8 @@ Based primarily on hand-drawn processes, exploring plant growth. This addon is m
 abstracted enough that it can be used for naiive simulations of capillary action, plant growth,
 ant-hill structures, etc, and the language used will be tweaked to match that purpose.
 
+(1/28/17) NOTE: This currently is using an impossible to traverse structure using vectors, currently rebuilding using a more proper tree structure, using a tree class here: http://tree.phi-sci.com
+
 ---
 
 ## Sequence
@@ -96,8 +98,3 @@ for each segment
 
 method returns the temporary branch
 ```
-
-## generateLeaf() (remove)
-
-Currently there is a method for leaf generation, but this isn't entirely necessary for the functioning of a more
-abstracted growth generation class. This needs to be moved.
