@@ -1,6 +1,6 @@
 # ofxGrowth
 
-![Branches](examples/branches.jpg?raw=true)
+![Branches](images/branches.jpg?raw=true)
 
 Openframeworks addon for exploring procedural growth patterns.
 
