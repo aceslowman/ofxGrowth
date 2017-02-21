@@ -1,15 +1,6 @@
 #include "ofxGrowthNode.h"
 #include "ofxGrowth.h"
 
-/*
- 
- TODO LIST:
- 
- tie length to a diminishment factor
- reset the distance from center whenever we are branching off (not totally important)
- 
- */
-
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     distance_to_center = 0;
     level              = 0;
@@ -47,13 +38,11 @@ void ofxGrowthNode::generateChildren(){
     
     if(distance_to_center < tree.node_max){
         shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree, this, level));
-        
         children.push_back(child);
         
         //generate next in new branch
         if(ofRandomuf() < tree.density){
             shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree,this,level + 1));
-            
             children.push_back(child);
         }
     }

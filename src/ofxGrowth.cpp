@@ -6,17 +6,34 @@ ofxGrowth::ofxGrowth(){
     length      = 30.0;
     crookedness = 0.2;
     density     = 0.5;
-    depth       = 3;
+    depth       = 4;
     dim_f       = 0.75;
-    
+    growth_vector = ofVec3f(0,1,0);
+}
+
+ofxGrowth::~ofxGrowth(){
+    meshes.clear();
+    ofxGrowthNode * temp_node = root;
+
+    while(!temp_node->children.empty()){
+        for(int i = 0; i < temp_node->children.size(); i++){
+            root = temp_node->children[i].get();
+            delete temp_node;
+            
+            temp_node = root;
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void ofxGrowth::setup(){
     root = new ofxGrowthNode(*this);
-    root->growth_vector = ofVec3f(0,1,0);
+    root->growth_vector = growth_vector;
     root->location = ofVec3f(0,0,0);
     
     num_nodes = 0;
     
     setupMesh();
-    
 }
 
 //--------------------------------------------------------------
@@ -55,9 +72,9 @@ void ofxGrowth::checkChildren(ofxGrowthNode * temp_node, ofMesh * temp_mesh){
                     new_mesh->addColor(ofFloatColor(1,1,0));
                 
                 meshes.push_back(new_mesh);
-                
                 checkChildren(temp_node->children[i].get(), new_mesh.get());
             }else{
+                
                 temp_mesh->addVertex(temp_node->location);
                 if(temp_node->children[i].get()->level == 0)
                     temp_mesh->addColor(ofFloatColor(1,0,0));
