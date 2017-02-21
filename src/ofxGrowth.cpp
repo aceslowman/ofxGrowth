@@ -2,10 +2,12 @@
 
 //--------------------------------------------------------------
 ofxGrowth::ofxGrowth(){
+    node_max    = 20;
     length      = 30.0;
-    crookedness = 1.0;
+    crookedness = 0.2;
     density     = 0.5;
     depth       = 3;
+    dim_f       = 0.75;
     
     root = new ofxGrowthNode(*this);
     root->growth_vector = ofVec3f(0,1,0);
@@ -14,12 +16,11 @@ ofxGrowth::ofxGrowth(){
     num_nodes = 0;
     
     setupMesh();
+    
 }
 
 //--------------------------------------------------------------
 void ofxGrowth::setupMesh(){
-    int index = 0;
-
     shared_ptr<ofMesh> shared_mesh = std::make_shared<ofMesh>();
     shared_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
     shared_mesh->setupIndicesAuto();
@@ -33,11 +34,6 @@ void ofxGrowth::setupMesh(){
 
 //--------------------------------------------------------------
 void ofxGrowth::checkChildren(ofxGrowthNode * temp_node, ofMesh * temp_mesh){
-    
-    /*
-     I now have some degree of confirmation that the linked list is working, it's just that I now need to be sure that I'm traversing it correctly.
-     */
-    
     if(!temp_node->children.empty()){
         for(int i = 0; i < temp_node->children.size(); i++){
             if(i > 0){
@@ -45,20 +41,38 @@ void ofxGrowth::checkChildren(ofxGrowthNode * temp_node, ofMesh * temp_mesh){
                 
                 new_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
                 new_mesh->addVertex(temp_node->location);
-                new_mesh->addColor(ofFloatColor(0,0,0));
+                
+                if(temp_node->children[i].get()->level == 0)
+                    new_mesh->addColor(ofFloatColor(1,0,0));
+                
+                if(temp_node->children[i].get()->level == 1)
+                    new_mesh->addColor(ofFloatColor(0,1,0));
+                
+                if(temp_node->children[i].get()->level == 2)
+                    new_mesh->addColor(ofFloatColor(0,0,1));
+                
+                if(temp_node->children[i].get()->level > 2)
+                    new_mesh->addColor(ofFloatColor(1,1,0));
                 
                 meshes.push_back(new_mesh);
-   
-                checkChildren(temp_node->children[i].get(), new_mesh.get());//check all children of the child
+                
+                checkChildren(temp_node->children[i].get(), new_mesh.get());
             }else{
-                /*
-                 When traversed through here, it works properly
-                 */
                 temp_mesh->addVertex(temp_node->location);
-                temp_mesh->addColor(ofFloatColor(0,0,0));
+                if(temp_node->children[i].get()->level == 0)
+                    temp_mesh->addColor(ofFloatColor(1,0,0));
+                
+                if(temp_node->children[i].get()->level == 1)
+                    temp_mesh->addColor(ofFloatColor(0,1,0));
+                
+                if(temp_node->children[i].get()->level == 2)
+                    temp_mesh->addColor(ofFloatColor(0,0,1));
+                
+                if(temp_node->children[i].get()->level > 2)
+                    temp_mesh->addColor(ofFloatColor(1,1,0));
                 
                 ofxGrowthNode * temp_child = temp_node->children[i].get();
-                checkChildren(temp_child, temp_mesh);//check all children of the child
+                checkChildren(temp_child, temp_mesh);
             }
             temp_node = temp_node->children[i].get();
             num_nodes++;

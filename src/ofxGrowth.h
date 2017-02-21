@@ -7,22 +7,21 @@ class ofxGrowth {
     
 public:
     ofxGrowthNode * root;
-//    vector< vector<ofMesh> > meshes;
     vector<shared_ptr<ofMesh>> meshes;
     
     void setupMesh();
     void checkChildren(ofxGrowthNode * temp_node, ofMesh * temp_mesh);
     void drawMesh();
-    
 
     int num_nodes;
     
     float length;
     float crookedness;
     float density;
+    float dim_f;
     int depth;
+    int node_max;
     ofVec3f growth_vector;
     
     ofxGrowth();
-//    ~ofxGrowth();
 };

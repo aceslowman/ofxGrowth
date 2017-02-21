@@ -1,6 +1,15 @@
 #include "ofxGrowthNode.h"
 #include "ofxGrowth.h"
 
+/*
+ 
+ TODO LIST:
+ 
+ tie length to a diminishment factor
+ reset the distance from center whenever we are branching off (not totally important)
+ 
+ */
+
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     distance_to_center = 0;
     level              = 0;
@@ -9,10 +18,9 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     generateChildren();
 }
 
-ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p): tree(t), parent(p) {
+ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), parent(p) {
     distance_to_center = parent->distance_to_center + 1;
-    level = parent->level;
-    
+    level              = lvl;
     
     setupNode();
 }
@@ -25,9 +33,8 @@ void ofxGrowthNode::setupNode(){
         ofClamp(parent->growth_vector.z + (ofRandomf() * tree.crookedness),-1.0,1.0)
     );
     
-    float length = tree.length * ofRandomuf();
+    float length = tree.length * ofRandomuf()*(tree.dim_f / (level + 1));
     
-    //update location
     location = parent->location + (growth_vector * length);
     
     if(level < tree.depth){
@@ -37,18 +44,16 @@ void ofxGrowthNode::setupNode(){
 
 //--------------------------------------------------------------
 void ofxGrowthNode::generateChildren(){
-    //generate next in branch
-    if(distance_to_center < 20){
-        shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree,this));
+    
+    if(distance_to_center < tree.node_max){
+        shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree, this, level));
+        
         children.push_back(child);
         
         //generate next in new branch
         if(ofRandomuf() < tree.density){
-            shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree,this));
-            //what are some of the differences when I go into a further branch?
-            //I have to apply alterations to the chain here:
+            shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree,this,level + 1));
             
-            child->level = level + 1;
             children.push_back(child);
         }
     }

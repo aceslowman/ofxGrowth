@@ -23,5 +23,5 @@ public:
     void generateChildren();
     
     ofxGrowthNode(ofxGrowth &t);
-    ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p);
+    ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl);
 };
