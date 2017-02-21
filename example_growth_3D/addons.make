@@ -1,8 +1,0 @@
-ofxAssimpModelLoader
-ofxCv
-ofxGui
-ofxOpenCv
-ofxOsc
-ofxSvg
-ofxVectorGraphics
-ofxXmlSettings
