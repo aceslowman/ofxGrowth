@@ -13,10 +13,10 @@ public:
     ofVec3f growth_vector;
 
     int level;
-    int distance_to_center;
+    int distance_from_center;
     
     ofxGrowthNode * parent;
-    vector<shared_ptr<ofxGrowthNode>> children;
+    vector<unique_ptr<ofxGrowthNode>> children;
 
     
     void setupNode();

@@ -7,13 +7,11 @@ ofxGrowth::ofxGrowth(){
     crookedness = 0.2;
     density     = 0.08;
     depth       = 3;
-    dim_f       = 0.75;
+    dim_f       = 0.5;
     growth_vector = ofVec3f(0,1,0);
 }
-ofxGrowth::~ofxGrowth(){
-//    root->~ofxGrowthNode();
-//    meshes.clear();
-}
+
+ofxGrowth::~ofxGrowth(){}
 
 //--------------------------------------------------------------
 void ofxGrowth::setup(){
@@ -32,7 +30,7 @@ void ofxGrowth::rebuild(){
 //        element.reset();
 //    }
     
-    meshes.clear();//this isn't actually assuring that all of the objects it's pointing to are properly deleted
+    meshes.clear();
     setupMesh();
 }
 
@@ -40,8 +38,6 @@ void ofxGrowth::rebuild(){
 void ofxGrowth::setupMesh(){
     unique_ptr<ofMesh> mesh = make_unique<ofMesh>();
     mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
-    mesh->addVertex(root->location);
-    mesh->addColor(ofColor(0));
     
     meshes.push_back(std::move(mesh));
     
@@ -50,67 +46,47 @@ void ofxGrowth::setupMesh(){
 
 //--------------------------------------------------------------
 void ofxGrowth::generateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_index, bool share_root){
-    if(share_root){
-//        if(!temp_node->children.empty()){
-//            for(int i = 0; i < temp_node->children.size(); i++){
-//                if(i > 0){
-//                    shared_ptr<ofMesh> new_mesh = std::make_shared<ofMesh>();
-//                    mesh_index = 0;
-//                    
-//                    new_mesh->addIndex(mesh_index);
-//                    new_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
-//                    new_mesh->addVertex(temp_node->location);
-//                    new_mesh->addColor(ofFloatColor(1,0,0));
-//                    
-//                    meshes.push_back(std::move(new_mesh));
-//                    generateMesh(temp_node->children[i].get(), meshes.back().get(), mesh_index, share_root);
-//                    
-//                }else{
-//                    
-//                    temp_mesh->addIndex(mesh_index);
-//                    temp_mesh->addVertex(temp_node->location);
-//                    temp_mesh->addColor(ofFloatColor(1,0,0));
-//                    
-//                    ofxGrowthNode * temp_child = temp_node->children[i].get();
-//                    generateMesh(temp_child, temp_mesh, mesh_index, share_root);
-//                }
-//                temp_node = temp_node->children[i].get();
-//                
-//                mesh_index++;
-//                num_nodes++;
-//            }
-//        }
-    }else{
-        for(int i = 0; i < temp_node->children.size(); i++){
-            temp_mesh->addVertex(temp_node->location);
+    temp_mesh->addVertex(temp_node->location);
+    
+    if(temp_node->level == 0)
+        temp_mesh->addColor(ofFloatColor(1,0,0));
+    
+    if(temp_node->level == 1)
+        temp_mesh->addColor(ofFloatColor(0,1,0));
+    
+    if(temp_node->level == 2)
+        temp_mesh->addColor(ofFloatColor(0,0,1));
+    
+    if(temp_node->level > 2)
+        temp_mesh->addColor(ofFloatColor(1,1,0));
+    
+    for(int i = 0; i < temp_node->children.size(); i++){
+        if(i > 0){
+            unique_ptr<ofMesh> new_mesh = make_unique<ofMesh>();
+            new_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
             
-//            if(temp_node->children[i].get()->level == 0)
-                temp_mesh->addColor(ofFloatColor(1,0,0));
-//            
-//            if(temp_node->children[i].get()->level == 1)
-//                temp_mesh->addColor(ofFloatColor(0,1,0));
-//            
-//            if(temp_node->children[i].get()->level == 2)
-//                temp_mesh->addColor(ofFloatColor(0,0,1));
-//            
-//            if(temp_node->children[i].get()->level > 2)
-//                temp_mesh->addColor(ofFloatColor(1,1,0));
+            new_mesh->addVertex(temp_node->location);
             
-            if(i > 0){
-                unique_ptr<ofMesh> new_mesh = make_unique<ofMesh>();
-                
-                new_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
-                
-                meshes.push_back(move(new_mesh));
-                generateMesh(temp_node->children[i].get(), meshes.back().get(), 0, share_root);
-            }else{
-                generateMesh(temp_node->children[i].get(), temp_mesh, mesh_index++, share_root);
-            }
+            if(temp_node->children[i].get()->level == 0)
+                new_mesh->addColor(ofFloatColor(1,0,0));
             
-            temp_node = temp_node->children[i].get();
-
-            num_nodes++;
+            if(temp_node->children[i].get()->level == 1)
+                new_mesh->addColor(ofFloatColor(0,1,0));
+            
+            if(temp_node->children[i].get()->level == 2)
+                new_mesh->addColor(ofFloatColor(0,0,1));
+            
+            if(temp_node->children[i].get()->level > 2)
+                new_mesh->addColor(ofFloatColor(1,1,0));
+            
+            temp_mesh = new_mesh.get();
+            meshes.push_back(move(new_mesh));
         }
+
+        temp_node = temp_node->children[i].get();
+        generateMesh(temp_node, temp_mesh, mesh_index++, share_root);
+
+        num_nodes++;
     }
 }
 
@@ -126,13 +102,13 @@ void ofxGrowth::updateMesh(){
         for(int i = 0; i < temp_node->children.size(); i++){
             
             if(i > 0){
-                temp_mesh = meshes[current_mesh+1].get();//step forward in meshes
+                temp_mesh = meshes[current_mesh+1].get();
 //                mesh_index = 0;
             }
             
             temp_mesh->setVertex(mesh_index, temp_node->location);
             temp_mesh->setColor(mesh_index, ofFloatColor(0,1,0));
-            temp_node = temp_node->children[i].get();   //step forward from temp_node
+            temp_node = temp_node->children[i].get();
             
             mesh_index++;
         }
@@ -157,3 +133,28 @@ void ofxGrowth::drawMesh(){
     }
 }
 
+//--------------------------------------------------------------
+void ofxGrowth::drawPoints(){
+    
+    ofxGrowthNode * temp_node = root;
+    ofDrawSphere(temp_node->location, 5.0);
+    
+    while(!temp_node->children.empty()){
+        for(int i = 0; i < temp_node->children.size(); i++){
+            if(temp_node->children[i].get()->level == 0)
+                ofSetColor(ofFloatColor(1,0,0));
+            
+            if(temp_node->children[i].get()->level == 1)
+                ofSetColor(ofFloatColor(0,1,0));
+            
+            if(temp_node->children[i].get()->level == 2)
+                ofSetColor(ofFloatColor(0,0,1));
+            
+            if(temp_node->children[i].get()->level > 2)
+                ofSetColor(ofFloatColor(1,1,0));
+            
+            ofDrawSphere(temp_node->children[i].get()->location, 5.0);
+            temp_node = temp_node->children[i].get();
+        }
+    }
+}

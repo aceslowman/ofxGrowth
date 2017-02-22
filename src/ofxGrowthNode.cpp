@@ -2,7 +2,7 @@
 #include "ofxGrowth.h"
 
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
-    distance_to_center = 0;
+    distance_from_center = 0;
     level              = 0;
     growth_vector      = t.growth_vector;
     
@@ -10,15 +10,13 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
 }
 
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), parent(p) {
-    distance_to_center = parent->distance_to_center + 1;
+    distance_from_center = parent->distance_from_center + 1;
     level              = lvl;
     
     setupNode();
 }
 
-ofxGrowthNode::~ofxGrowthNode(){
-
-}
+ofxGrowthNode::~ofxGrowthNode(){}
 
 //--------------------------------------------------------------
 void ofxGrowthNode::setupNode(){
@@ -28,26 +26,22 @@ void ofxGrowthNode::setupNode(){
         ofClamp(parent->growth_vector.z + (ofRandomf() * tree.crookedness),-1.0,1.0)
     );
     
-    float length = tree.length * ofRandomuf()*(tree.dim_f / (level + 1));
+    float length = (tree.length * pow(tree.dim_f,level))*ofRandomuf();
     
     location = parent->location + (growth_vector * length);
     
-    if(level < tree.depth){
+    if(level < tree.depth && distance_from_center < tree.node_max){
         generateChildren();
     }
 }
 
 //--------------------------------------------------------------
 void ofxGrowthNode::generateChildren(){
-    
-    if(distance_to_center < tree.node_max){
-        unique_ptr<ofxGrowthNode> child = std::make_shared<ofxGrowthNode>(tree, this, level);
+    unique_ptr<ofxGrowthNode> child = std::make_unique<ofxGrowthNode>(tree, this, level);
+    children.push_back(std::move(child));
+
+    if(ofRandomuf() < tree.density && (level+1) < tree.depth){
+        unique_ptr<ofxGrowthNode> child = std::make_unique<ofxGrowthNode>(tree, this, level+1);
         children.push_back(std::move(child));
-        
-        //generate next in new branch
-        if(ofRandomuf() < tree.density){
-            unique_ptr<ofxGrowthNode> child = std::make_shared<ofxGrowthNode>(tree, this, level+1);
-            children.push_back(std::move(child));
-        }
     }
 }

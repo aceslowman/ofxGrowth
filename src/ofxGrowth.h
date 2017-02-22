@@ -18,6 +18,7 @@ public:
     void generateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_index, bool share_root);
     void updateChildren(ofxGrowthNode * temp_node);
     void drawMesh();
+    void drawPoints();
     void updateMesh();
     
     void animate();
