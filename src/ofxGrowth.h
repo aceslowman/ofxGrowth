@@ -10,6 +10,7 @@ public:
     vector<shared_ptr<ofMesh>> meshes;
     
     void setup();
+    void rebuild();
     void setupMesh();
     void checkChildren(ofxGrowthNode * temp_node, ofMesh * temp_mesh);
     void drawMesh();

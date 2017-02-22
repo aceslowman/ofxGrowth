@@ -25,4 +25,5 @@ public:
     
     ofxGrowthNode(ofxGrowth &t);
     ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl);
+    ~ofxGrowthNode();
 };

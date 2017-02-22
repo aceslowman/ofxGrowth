@@ -16,6 +16,10 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), 
     setupNode();
 }
 
+ofxGrowthNode::~ofxGrowthNode(){
+
+}
+
 //--------------------------------------------------------------
 void ofxGrowthNode::setupNode(){
     growth_vector = ofVec3f(
@@ -37,13 +41,13 @@ void ofxGrowthNode::setupNode(){
 void ofxGrowthNode::generateChildren(){
     
     if(distance_to_center < tree.node_max){
-        shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree, this, level));
-        children.push_back(child);
+        shared_ptr<ofxGrowthNode> child = std::make_shared<ofxGrowthNode>(tree, this, level);
+        children.push_back(std::move(child));
         
         //generate next in new branch
         if(ofRandomuf() < tree.density){
-            shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree,this,level + 1));
-            children.push_back(child);
+            shared_ptr<ofxGrowthNode> child = std::make_shared<ofxGrowthNode>(tree, this, level+1);
+            children.push_back(std::move(child));
         }
     }
 }
