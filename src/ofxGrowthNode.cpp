@@ -41,12 +41,12 @@ void ofxGrowthNode::setupNode(){
 void ofxGrowthNode::generateChildren(){
     
     if(distance_to_center < tree.node_max){
-        shared_ptr<ofxGrowthNode> child = std::make_shared<ofxGrowthNode>(tree, this, level);
+        unique_ptr<ofxGrowthNode> child = std::make_shared<ofxGrowthNode>(tree, this, level);
         children.push_back(std::move(child));
         
         //generate next in new branch
         if(ofRandomuf() < tree.density){
-            shared_ptr<ofxGrowthNode> child = std::make_shared<ofxGrowthNode>(tree, this, level+1);
+            unique_ptr<ofxGrowthNode> child = std::make_shared<ofxGrowthNode>(tree, this, level+1);
             children.push_back(std::move(child));
         }
     }

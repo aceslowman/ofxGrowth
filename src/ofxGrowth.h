@@ -5,18 +5,22 @@
 
 class ofxGrowth {
     
+    
+    
 public:
     ofxGrowthNode * root;
-    vector<shared_ptr<ofMesh>> meshes;
+//    vector<shared_ptr<ofMesh>> meshes;
+    vector<unique_ptr<ofMesh>> meshes;
     
     void setup();
     void rebuild();
     void setupMesh();
-    void checkChildren(ofxGrowthNode * temp_node, ofMesh * temp_mesh);
+    void generateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_index, bool share_root);
+    void updateChildren(ofxGrowthNode * temp_node);
     void drawMesh();
-    
-    void updateNodes();
     void updateMesh();
+    
+    void animate();
 
     int num_nodes;
     
@@ -30,4 +34,8 @@ public:
     
     ofxGrowth();
     ~ofxGrowth();
+    
+private:
+    
+    int driver;
 };
