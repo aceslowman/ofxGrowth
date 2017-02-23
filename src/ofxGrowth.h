@@ -9,20 +9,18 @@ class ofxGrowth {
     
 public:
     ofxGrowthNode * root;
-//    vector<shared_ptr<ofMesh>> meshes;
     vector<unique_ptr<ofMesh>> meshes;
     
     void setup();
-    void rebuild();
-    void setupMesh();
-    void generateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_index, bool share_root);
-    void updateChildren(ofxGrowthNode * temp_node);
+    void setupMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_node_id, bool share_root);
+    void update();
+    void updateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_node_id, int current_mesh);
+    
     void drawMesh();
     void drawPoints();
-    void updateMesh();
-    
     void animate();
-
+    void rebuild();
+    
     int num_nodes;
     
     float length;

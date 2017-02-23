@@ -2,11 +2,11 @@
 
 //--------------------------------------------------------------
 ofxGrowth::ofxGrowth(){
-    node_max    = 20;
+    node_max    = 5;
     length      = 30.0;
     crookedness = 0.2;
     density     = 0.08;
-    depth       = 3;
+    depth       = 2;
     dim_f       = 0.5;
     growth_vector = ofVec3f(0,1,0);
 }
@@ -18,35 +18,32 @@ void ofxGrowth::setup(){
     root = new ofxGrowthNode(*this);
     num_nodes = 0;
     
-    setupMesh();
+    unique_ptr<ofMesh> mesh = make_unique<ofMesh>();
+    mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
+    
+    meshes.push_back(std::move(mesh));
+    
+    setupMesh(root, meshes.back().get(),0,false);
+}
+
+//--------------------------------------------------------------
+void ofxGrowth::update(){
+    updateMesh(root, meshes[0].get(),0,0);
 }
 
 //--------------------------------------------------------------
 void ofxGrowth::rebuild(){
     root = new ofxGrowthNode(*this);
     num_nodes = 0;
-    
-//    for (auto & element : meshes) {
-//        element.reset();
-//    }
-    
+
     meshes.clear();
-    setupMesh();
+    setup();
 }
 
 //--------------------------------------------------------------
-void ofxGrowth::setupMesh(){
-    unique_ptr<ofMesh> mesh = make_unique<ofMesh>();
-    mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
-    
-    meshes.push_back(std::move(mesh));
-    
-    generateMesh(root, meshes.back().get(),0,false);
-}
-
-//--------------------------------------------------------------
-void ofxGrowth::generateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_index, bool share_root){
+void ofxGrowth::setupMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_node_id, bool share_root){
     temp_mesh->addVertex(temp_node->location);
+    temp_mesh->addIndex(mesh_node_id);
     
     if(temp_node->level == 0)
         temp_mesh->addColor(ofFloatColor(1,0,0));
@@ -66,6 +63,7 @@ void ofxGrowth::generateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int 
             new_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
             
             new_mesh->addVertex(temp_node->location);
+            new_mesh->addIndex(0);
             
             if(temp_node->children[i].get()->level == 0)
                 new_mesh->addColor(ofFloatColor(1,0,0));
@@ -81,37 +79,35 @@ void ofxGrowth::generateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int 
             
             temp_mesh = new_mesh.get();
             meshes.push_back(move(new_mesh));
+            mesh_node_id = 0;
         }
+        
+        mesh_node_id++;
 
         temp_node = temp_node->children[i].get();
-        generateMesh(temp_node, temp_mesh, mesh_index++, share_root);
+        setupMesh(temp_node, temp_mesh, mesh_node_id, share_root);
 
         num_nodes++;
     }
 }
 
-void ofxGrowth::updateMesh(){
-    
-    ofxGrowthNode * temp_node = root;
-    ofMesh * temp_mesh = meshes.front().get();
-    
-    int current_mesh = 0;
-    int mesh_index = 0;
-    
-    while(!temp_node->children.empty()){
-        for(int i = 0; i < temp_node->children.size(); i++){
+//--------------------------------------------------------------
+void ofxGrowth::updateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_node_id, int current_mesh){
+    temp_mesh->setVertex(mesh_node_id, temp_node->location);
+    temp_mesh->setColor(mesh_node_id, ofFloatColor(1,0,0));
+                        
+    for(int i = 0; i < temp_node->children.size(); i++){
+        if(i > 0){
+            temp_mesh = meshes[current_mesh + 1].get();
             
-            if(i > 0){
-                temp_mesh = meshes[current_mesh+1].get();
-//                mesh_index = 0;
-            }
-            
-            temp_mesh->setVertex(mesh_index, temp_node->location);
-            temp_mesh->setColor(mesh_index, ofFloatColor(0,1,0));
-            temp_node = temp_node->children[i].get();
-            
-            mesh_index++;
+            current_mesh = current_mesh + 1;
+            mesh_node_id = 0;
         }
+        
+        mesh_node_id++;
+        
+        temp_node = temp_node->children[i].get();
+        updateMesh(temp_node, temp_mesh, mesh_node_id, current_mesh);
     }
 }
 
