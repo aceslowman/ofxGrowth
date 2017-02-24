@@ -30,18 +30,7 @@ void ofxGrowth::setup(){
 void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id){
     current_mesh->addVertex(current_node->location);
     current_mesh->addIndex(mesh_node_id);
-    
-    if(current_node->level == 0)
-        current_mesh->addColor(ofFloatColor(1,0,0));
-    
-    if(current_node->level == 1)
-        current_mesh->addColor(ofFloatColor(0,1,0));
-    
-    if(current_node->level == 2)
-        current_mesh->addColor(ofFloatColor(0,0,1));
-    
-    if(current_node->level > 2)
-        current_mesh->addColor(ofFloatColor(1,1,0));
+    current_mesh->addColor(colorLevels(current_node->level));
     
     for(int i = 0; i < current_node->children.size(); i++){
         if(i > 0){
@@ -50,18 +39,7 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, i
             
             new_mesh->addVertex(current_node->location);
             new_mesh->addIndex(0);
-            
-            if(current_node->children[i].get()->level == 0)
-                new_mesh->addColor(ofFloatColor(1,0,0));
-            
-            if(current_node->children[i].get()->level == 1)
-                new_mesh->addColor(ofFloatColor(0,1,0));
-            
-            if(current_node->children[i].get()->level == 2)
-                new_mesh->addColor(ofFloatColor(0,0,1));
-            
-            if(current_node->children[i].get()->level > 2)
-                new_mesh->addColor(ofFloatColor(1,1,0));
+            new_mesh->addColor(colorLevels(current_node->level));
             
             current_mesh = new_mesh.get();
             
@@ -82,6 +60,11 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, i
 //--------------------------------------------------------------
 void ofxGrowth::update(){
     current_mesh_id = 0;
+    
+    for (auto & child : root->children) {
+        child->update();
+    }
+    
     updateMesh(root, meshes[0].get(),0);
 }
 
@@ -109,8 +92,32 @@ void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, 
 
 //--------------------------------------------------------------
 void ofxGrowth::drawMesh(){
-    
     for(int i = 0; i < meshes.size(); i++){
         meshes[i].get()->draw();
     }
+}
+
+//--------------------------------------------------------------
+ofColor ofxGrowth::colorLevels(int level){
+    ofColor color;
+
+    switch (level) {
+        case 0:
+            color = ofFloatColor(1,0,0);
+            break;
+        case 1:
+            color = ofFloatColor(0,1,0);
+            break;
+        case 2:
+            color = ofFloatColor(0,0,1);
+            break;
+        case 3:
+            color = ofFloatColor(1,1,0);
+            break;
+        default:
+            color = ofFloatColor(1,1,0);
+            break;
+    }
+    
+    return color;
 }

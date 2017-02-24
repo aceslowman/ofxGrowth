@@ -19,8 +19,13 @@ public:
     vector<unique_ptr<ofxGrowthNode>> children;
 
     
-    void setupNode();
+    void setup();
+    void update();
     void generateChildren();
+    void updateChildren();
+    
+    float lengthRandom;
+    ofVec3f growthVectorRandom;
     
     
     ofxGrowthNode(ofxGrowth &t);
