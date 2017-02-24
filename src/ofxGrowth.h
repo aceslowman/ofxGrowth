@@ -12,14 +12,11 @@ public:
     vector<unique_ptr<ofMesh>> meshes;
     
     void setup();
-    void setupMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_node_id, bool share_root);
     void update();
-    void updateMesh(ofxGrowthNode * temp_node, ofMesh * temp_mesh, int mesh_node_id, int current_mesh);
+    void setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
+    void updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
     
     void drawMesh();
-    void drawPoints();
-    void animate();
-    void rebuild();
     
     int num_nodes;
     
@@ -29,6 +26,9 @@ public:
     float dim_f;
     int depth;
     int node_max;
+    
+    int current_mesh_id;
+    
     ofVec3f growth_vector;
     
     ofxGrowth();
@@ -36,5 +36,4 @@ public:
     
 private:
     
-    int driver;
 };
