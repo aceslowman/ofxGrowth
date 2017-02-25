@@ -34,6 +34,7 @@ public:
     int current_mesh_id;
     
     ofVec3f growth_vector;
+    ofVec3f origin;
     
     ofxGrowth();
     ~ofxGrowth();

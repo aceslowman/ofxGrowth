@@ -2,12 +2,16 @@
 #include "ofxGrowth.h"
 
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
+    parent = NULL;
     lengthRandom = ofRandomuf();
     growthVectorRandom = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     
     distance_from_center = 0;
     level              = 0;
     growth_vector      = t.growth_vector;
+    location = tree.origin;
+    
+    isRoot = true;
     
     generateChildren();
 }
@@ -29,6 +33,8 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), 
     
     location = parent->location + (growth_vector * length);
     
+    isRoot = false;
+    
     setup();
 }
 
@@ -43,16 +49,23 @@ void ofxGrowthNode::setup(){
 
 //--------------------------------------------------------------
 void ofxGrowthNode::update(){
-        growth_vector = ofVec3f(
-                                ofClamp(tree.growth_vector.x + (growthVectorRandom.x * tree.crookedness),-1.0,1.0),
-                                ofClamp(tree.growth_vector.y + (growthVectorRandom.y * tree.crookedness),-1.0,1.0),
-                                ofClamp(tree.growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
-                                );
-    
-    
     float length = (tree.length * pow(tree.dim_f,level))*lengthRandom;
     
-    location = parent->location + (growth_vector * length);
+    if(isRoot){
+        growth_vector = tree.growth_vector;
+        
+        location = tree.origin + (growth_vector * length);
+    }else{
+        growth_vector = ofVec3f(
+            ofClamp(parent->growth_vector.x + (growthVectorRandom.x * tree.crookedness),-1.0,1.0),
+            ofClamp(parent->growth_vector.y + (growthVectorRandom.y * tree.crookedness),-1.0,1.0),
+            ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
+        );
+        
+        location = parent->location + (growth_vector * length);
+    }
+    
+    
     
     updateChildren();
 }

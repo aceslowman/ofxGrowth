@@ -9,6 +9,7 @@ ofxGrowth::ofxGrowth(){
     depth       = 2;
     dim_f       = 0.5;
     growth_vector = ofVec3f(0,1,0);
+    origin = ofVec3f(0,0,0);
 }
 
 ofxGrowth::~ofxGrowth(){}
@@ -20,6 +21,7 @@ void ofxGrowth::setup(){
     
     unique_ptr<ofMesh> mesh = make_unique<ofMesh>();
     mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
+    ofSetLineWidth(2.0);
     
     meshes.push_back(std::move(mesh));
     
@@ -61,9 +63,11 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, i
 void ofxGrowth::update(){
     current_mesh_id = 0;
     
-    for (auto & child : root->children) {
-        child->update();
-    }
+    root->update();
+//    
+//    for (auto & child : root->children) {
+//        child->update();
+//    }
     
     updateMesh(root, meshes[0].get(),0);
 }
@@ -71,13 +75,18 @@ void ofxGrowth::update(){
 //--------------------------------------------------------------
 void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id){
     current_mesh->setVertex(mesh_node_id, current_node->location);
-    current_mesh->setColor(mesh_node_id, ofFloatColor(1,0,0));
+    current_mesh->setColor(mesh_node_id, colorLevels(current_node->level));
     
     for(int i = 0; i < current_node->children.size(); i++){
         if(i > 0){
             current_mesh = meshes[current_mesh_id + 1].get();
             current_mesh_id = current_mesh_id + 1;
             mesh_node_id = 0;
+            
+            current_mesh->setVertex(mesh_node_id, current_node->location);
+            current_mesh->setColor(mesh_node_id, colorLevels(current_node->level));
+            
+            mesh_node_id = 1;
             
             current_node = current_node->children[i].get();
             updateMesh(current_node, current_mesh, mesh_node_id);
@@ -103,21 +112,22 @@ ofColor ofxGrowth::colorLevels(int level){
 
     switch (level) {
         case 0:
-            color = ofFloatColor(1,0,0);
+            color = ofColor(255,221,25,205);//yellowish
             break;
         case 1:
-            color = ofFloatColor(0,1,0);
+            color = ofColor(143,177,178,205); //GRAY BLUE
             break;
         case 2:
-            color = ofFloatColor(0,0,1);
+            color = ofColor(20,198,204,205); //blue
             break;
         case 3:
-            color = ofFloatColor(1,1,0);
+            color = ofColor(255,0,170,205);//pink
             break;
         default:
-            color = ofFloatColor(1,1,0);
+            color = ofColor(178,18,125,205);//dark pink
             break;
     }
     
     return color;
 }
+

@@ -7,6 +7,8 @@ class ofxGrowth;
 class ofxGrowthNode {
     
 public:
+    
+    bool isRoot;
 
     ofxGrowth &tree;
     ofVec3f location;
