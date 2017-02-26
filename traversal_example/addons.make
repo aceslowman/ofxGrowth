@@ -1,0 +1,4 @@
+ofxGrowth
+ofxGui
+ofxSyphon
+ofxXmlSettings

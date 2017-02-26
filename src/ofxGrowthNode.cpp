@@ -13,6 +13,8 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     growth_vector        = t.growth_vector;
     location             = tree.origin;
     
+    color = ofColor(255,255,255);
+    
     generateChildren();
 }
 
@@ -32,6 +34,8 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), 
     float length = (tree.length * pow(tree.dim_f,level))*lengthRandom;
     
     location = parent->location + (growth_vector * length);
+    
+    color = ofColor(255,255,255);
     
     isRoot = false;
     
@@ -70,6 +74,16 @@ void ofxGrowthNode::update(){
     updateChildren();
 }
 
+void ofxGrowthNode::updateColor(int driver){
+    int t_driver = ofGetElapsedTimeMillis()/1000;
+    
+    if(t_driver != driver){
+        for (auto & child : children) {
+            child->updateColor(driver);
+        }
+    }
+}
+
 //--------------------------------------------------------------
 void ofxGrowthNode::generateChildren(){
     unique_ptr<ofxGrowthNode> child = std::make_unique<ofxGrowthNode>(tree, this, level);
@@ -87,3 +101,4 @@ void ofxGrowthNode::updateChildren(){
         child->update();
     }
 }
+

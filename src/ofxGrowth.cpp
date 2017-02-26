@@ -68,9 +68,9 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, i
 
 //--------------------------------------------------------------
 void ofxGrowth::update(){
-    
     current_mesh_id = 0;
     root->update();
+    root->updateColor(driver);
     ofSetLineWidth(stroke_width);
     updateMesh(root, meshes[0].get(),0);
 }
@@ -102,40 +102,6 @@ void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, 
             updateMesh(current_node, current_mesh, mesh_node_id);
         }
     }
-}
-
-//--------------------------------------------------------------
-void ofxGrowth::threadedUpdate(){
-    int t_driver = ofGetElapsedTimeMillis()/2000;
-    
-    if(t_driver != driver){
-        
-        cap_current_mesh->setColor(cap_mesh_node_id, ofColor(255,0,0));
-        
-        for(int i = 0; i < cap_current_node->children.size(); i++){
-            if(i > 0){
-//                if(meshes[cap_current_mesh_id + 1]){
-////                    cap_current_mesh = meshes[cap_current_mesh_id + 1].get();
-////                    cap_current_mesh_id = cap_current_mesh_id + 1;
-//                    cap_current_mesh->setColor(0, ofColor(255,0,0));
-//                    cap_mesh_node_id = 1;
-//                }
-            }else{
-//                cap_mesh_node_id++;
-            }
-//            cap_current_node = cap_current_node->children[i].get();
-        }
-        cap_mesh_node_id++;
-        
-        ofLog(OF_LOG_NOTICE,"cap_current_node: "+ofToString(cap_current_node));
-        ofLog(OF_LOG_NOTICE,"cap_current_mesh: "+ofToString(cap_current_mesh));
-        ofLog(OF_LOG_NOTICE,"cap_current_mesh_id: "+ofToString(cap_current_mesh_id));
-        ofLog(OF_LOG_NOTICE,"cap_mesh_node_id: "+ofToString(cap_mesh_node_id));
-        
-        
-    }
-    
-    driver = t_driver;
 }
 
 //--------------------------------------------------------------
