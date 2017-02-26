@@ -2,21 +2,25 @@
 
 #include "ofMain.h"
 #include "ofxGrowthNode.h"
+#include "ofThread.h"
 
-class ofxGrowth {
+class ofxGrowth: public ofThread {
     
     
     
 public:
-    ofxGrowthNode * root;
-    vector<unique_ptr<ofMesh>> meshes;
+
+
     
     void setup();
     void update();
+    
     void setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
     void updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
-    void updateNodes(int l, ofVec3f gv);
+    void threadedUpdate();
+    void updateThreadedMesh();
     
+    void updateNodes(int l, ofVec3f gv);
     
     ofColor colorLevels(int level);
     
@@ -30,6 +34,7 @@ public:
     float dim_f;
     int depth;
     int node_max;
+    int stroke_width;
     
     int current_mesh_id;
     
@@ -39,6 +44,7 @@ public:
     ofxGrowth();
     ~ofxGrowth();
     
-private:
-    
+protected:
+    vector<unique_ptr<ofMesh>> meshes;
+    ofxGrowthNode * root;
 };

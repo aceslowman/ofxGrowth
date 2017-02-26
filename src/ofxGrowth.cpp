@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 ofxGrowth::ofxGrowth(){
-    node_max    = 5;
+    node_max    = 3;
     length      = 30.0;
     crookedness = 0.2;
     density     = 0.08;
@@ -10,6 +10,7 @@ ofxGrowth::ofxGrowth(){
     dim_f       = 0.5;
     growth_vector = ofVec3f(0,1,0);
     origin = ofVec3f(0,0,0);
+    stroke_width= 2.0;
 }
 
 ofxGrowth::~ofxGrowth(){}
@@ -21,7 +22,7 @@ void ofxGrowth::setup(){
     
     unique_ptr<ofMesh> mesh = make_unique<ofMesh>();
     mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
-    ofSetLineWidth(2.0);
+    ofSetLineWidth(stroke_width);
     
     meshes.push_back(std::move(mesh));
     
@@ -61,14 +62,10 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, i
 
 //--------------------------------------------------------------
 void ofxGrowth::update(){
+    
     current_mesh_id = 0;
-    
     root->update();
-//    
-//    for (auto & child : root->children) {
-//        child->update();
-//    }
-    
+    ofSetLineWidth(stroke_width);
     updateMesh(root, meshes[0].get(),0);
 }
 
@@ -89,21 +86,81 @@ void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, 
             mesh_node_id = 1;
             
             current_node = current_node->children[i].get();
+
             updateMesh(current_node, current_mesh, mesh_node_id);
         }else{
             mesh_node_id++;
             
             current_node = current_node->children[i].get();
+            
             updateMesh(current_node, current_mesh, mesh_node_id);
         }
     }
 }
 
 //--------------------------------------------------------------
+void ofxGrowth::threadedUpdate(){
+    startThread();
+    current_mesh_id = 0;
+    
+    updateThreadedMesh();
+    
+    stopThread();
+}
+
+//--------------------------------------------------------------
+void ofxGrowth::updateThreadedMesh(){
+    
+    ofMesh * current_mesh = meshes[0].get();
+    ofxGrowthNode * current_node = root;
+    
+    int mesh_node_id = 0;
+
+    while(!current_node->children.empty()){
+        
+        lock();
+        current_mesh->setVertex(mesh_node_id, current_node->location);
+        current_mesh->setColor(mesh_node_id, ofColor(255,0,0));
+        
+        for(int i = 0; i < current_node->children.size(); i++){
+            if(i > 0){
+                current_mesh = meshes[current_mesh_id + 1].get();
+                current_mesh_id = current_mesh_id + 1;
+                mesh_node_id = 0;
+
+                
+                current_mesh->setVertex(mesh_node_id, current_node->location);
+                current_mesh->setColor(mesh_node_id, ofColor(255,0,0));
+    
+
+                mesh_node_id = 1;
+
+                current_node = current_node->children[i].get();
+
+                drawMesh();
+                
+            }else{
+                mesh_node_id++;
+                
+                current_node = current_node->children[i].get();
+                
+                drawMesh();
+            }
+            
+            unlock();
+            drawMesh();
+            sleep(1);
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void ofxGrowth::drawMesh(){
+    lock();
     for(int i = 0; i < meshes.size(); i++){
         meshes[i].get()->draw();
     }
+    unlock();
 }
 
 //--------------------------------------------------------------
@@ -130,4 +187,3 @@ ofColor ofxGrowth::colorLevels(int level){
     
     return color;
 }
-

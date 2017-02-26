@@ -3,15 +3,15 @@
 
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     parent = NULL;
-    lengthRandom = ofRandomuf();
-    growthVectorRandom = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
+    isRoot = true;
+    
+    lengthRandom         = ofRandomuf();
+    growthVectorRandom   = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     
     distance_from_center = 0;
-    level              = 0;
-    growth_vector      = t.growth_vector;
-    location = tree.origin;
-    
-    isRoot = true;
+    level                = 0;
+    growth_vector        = t.growth_vector;
+    location             = tree.origin;
     
     generateChildren();
 }
