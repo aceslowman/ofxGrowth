@@ -27,6 +27,12 @@ void ofxGrowth::setup(){
     meshes.push_back(std::move(mesh));
     
     setupMesh(root, meshes.back().get(),0);
+    
+    cap_current_mesh_id = 0;
+    cap_mesh_node_id = 0;
+    cap_current_mesh = meshes[0].get();
+    cap_current_node = root;
+    cap_mesh_node_id = 0;
 }
 
 //--------------------------------------------------------------
@@ -100,67 +106,43 @@ void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, 
 
 //--------------------------------------------------------------
 void ofxGrowth::threadedUpdate(){
-    startThread();
-    current_mesh_id = 0;
+    int t_driver = ofGetElapsedTimeMillis()/2000;
     
-    updateThreadedMesh();
-    
-    stopThread();
-}
-
-//--------------------------------------------------------------
-void ofxGrowth::updateThreadedMesh(){
-    
-    ofMesh * current_mesh = meshes[0].get();
-    ofxGrowthNode * current_node = root;
-    
-    int mesh_node_id = 0;
-
-    while(!current_node->children.empty()){
+    if(t_driver != driver){
         
-        lock();
-        current_mesh->setVertex(mesh_node_id, current_node->location);
-        current_mesh->setColor(mesh_node_id, ofColor(255,0,0));
+        cap_current_mesh->setColor(cap_mesh_node_id, ofColor(255,0,0));
         
-        for(int i = 0; i < current_node->children.size(); i++){
+        for(int i = 0; i < cap_current_node->children.size(); i++){
             if(i > 0){
-                current_mesh = meshes[current_mesh_id + 1].get();
-                current_mesh_id = current_mesh_id + 1;
-                mesh_node_id = 0;
-
-                
-                current_mesh->setVertex(mesh_node_id, current_node->location);
-                current_mesh->setColor(mesh_node_id, ofColor(255,0,0));
-    
-
-                mesh_node_id = 1;
-
-                current_node = current_node->children[i].get();
-
-                drawMesh();
-                
+//                if(meshes[cap_current_mesh_id + 1]){
+////                    cap_current_mesh = meshes[cap_current_mesh_id + 1].get();
+////                    cap_current_mesh_id = cap_current_mesh_id + 1;
+//                    cap_current_mesh->setColor(0, ofColor(255,0,0));
+//                    cap_mesh_node_id = 1;
+//                }
             }else{
-                mesh_node_id++;
-                
-                current_node = current_node->children[i].get();
-                
-                drawMesh();
+//                cap_mesh_node_id++;
             }
-            
-            unlock();
-            drawMesh();
-            sleep(1);
+//            cap_current_node = cap_current_node->children[i].get();
         }
+        cap_mesh_node_id++;
+        
+        ofLog(OF_LOG_NOTICE,"cap_current_node: "+ofToString(cap_current_node));
+        ofLog(OF_LOG_NOTICE,"cap_current_mesh: "+ofToString(cap_current_mesh));
+        ofLog(OF_LOG_NOTICE,"cap_current_mesh_id: "+ofToString(cap_current_mesh_id));
+        ofLog(OF_LOG_NOTICE,"cap_mesh_node_id: "+ofToString(cap_mesh_node_id));
+        
+        
     }
+    
+    driver = t_driver;
 }
 
 //--------------------------------------------------------------
 void ofxGrowth::drawMesh(){
-    lock();
     for(int i = 0; i < meshes.size(); i++){
         meshes[i].get()->draw();
     }
-    unlock();
 }
 
 //--------------------------------------------------------------

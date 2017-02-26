@@ -18,7 +18,6 @@ public:
     void setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
     void updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
     void threadedUpdate();
-    void updateThreadedMesh();
     
     void updateNodes(int l, ofVec3f gv);
     
@@ -44,7 +43,13 @@ public:
     ofxGrowth();
     ~ofxGrowth();
     
-protected:
     vector<unique_ptr<ofMesh>> meshes;
     ofxGrowthNode * root;
+    
+    int cap_mesh_node_id;
+    int cap_current_mesh_id;
+    ofMesh * cap_current_mesh;
+    ofxGrowthNode * cap_current_node;
+    
+    int driver;
 };
