@@ -70,7 +70,7 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, i
 void ofxGrowth::update(){
     current_mesh_id = 0;
     root->update();
-    root->updateColor(driver);
+    
     ofSetLineWidth(stroke_width);
     updateMesh(root, meshes[0].get(),0);
 }

@@ -1,32 +1,25 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6A0127DE7FA543096F3B094B36349DCC271272AE",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "412251C68A7FFB1D4E1F5EA29130C805C129E42F",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "6A0127DE7FA543096F3B094B36349DCC271272AE" : 9223372036854775807,
     "412251C68A7FFB1D4E1F5EA29130C805C129E42F" : 9223372036854775807,
     "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "846D1FF3-8BBB-49D3-B5CE-8E72104BAF5B",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "6A0127DE7FA543096F3B094B36349DCC271272AE" : "beginners-growth\/",
-    "412251C68A7FFB1D4E1F5EA29130C805C129E42F" : "..\/addons\/ofxGrowth",
-    "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : "..\/addons\/ofxSyphon"
+    "412251C68A7FFB1D4E1F5EA29130C805C129E42F" : "ofxGrowth\/",
+    "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : "ofxSyphon\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "traversal_study",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
-  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "traversal_study\/traversal_study.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "traversal_example\/traversal_study.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AustinSlominski\/ofxGrowth.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "412251C68A7FFB1D4E1F5EA29130C805C129E42F"
-    },
-    {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AustinSlominski\/beginners-growth.git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6A0127DE7FA543096F3B094B36349DCC271272AE"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/astellato\/ofxSyphon.git",
