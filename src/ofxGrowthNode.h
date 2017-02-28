@@ -27,6 +27,9 @@ public:
     void generateChildren();
     void updateChildren();
     
+    ofColor setColor();
+    void updateColor();
+    
     void updateColor(int driver);
     
     float lengthRandom;

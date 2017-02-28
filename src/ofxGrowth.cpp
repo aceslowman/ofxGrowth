@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 ofxGrowth::ofxGrowth(){
-    node_max    = 3;
+    node_max    = 40.0;
     length      = 30.0;
     crookedness = 0.2;
     density     = 0.08;
@@ -109,29 +109,4 @@ void ofxGrowth::drawMesh(){
     for(int i = 0; i < meshes.size(); i++){
         meshes[i].get()->draw();
     }
-}
-
-//--------------------------------------------------------------
-ofColor ofxGrowth::colorLevels(int level){
-    ofColor color;
-
-    switch (level) {
-        case 0:
-            color = ofColor(255,221,25,205);//yellowish
-            break;
-        case 1:
-            color = ofColor(143,177,178,205); //GRAY BLUE
-            break;
-        case 2:
-            color = ofColor(20,198,204,205); //blue
-            break;
-        case 3:
-            color = ofColor(255,0,170,205);//pink
-            break;
-        default:
-            color = ofColor(178,18,125,205);//dark pink
-            break;
-    }
-    
-    return color;
 }

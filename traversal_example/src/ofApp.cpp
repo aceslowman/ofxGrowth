@@ -35,7 +35,9 @@ void ofApp::update(){
         crookedness = (sin((ofGetElapsedTimef())/2.0)*lfo_1_rate)*10.0;
     
     updateTree();
+    growth.root->updateColor(ofGetElapsedTimeMillis()/1000);
     growth.update();
+    
 }
 
 //--------------------------------------------------------------
@@ -51,7 +53,7 @@ void ofApp::updateTree(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetBackgroundColor(ofFloatColor(0.5));
+    ofSetBackgroundColor(ofFloatColor(1.0));
     
     ofEnableAntiAliasing();
     ofEnableSmoothing();
@@ -79,6 +81,7 @@ void ofApp::keyPressed(int key){
     if(key == 'b'){
         ofResetElapsedTimeCounter();
     }
+    
 }
 
 //--------------------------------------------------------------

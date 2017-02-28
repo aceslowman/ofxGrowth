@@ -13,7 +13,7 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     growth_vector        = t.growth_vector;
     location             = tree.origin;
     
-    color = ofColor(0,0,0,255);
+    color = setColor();
     
     generateChildren();
 }
@@ -35,7 +35,7 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), 
     
     location = parent->location + (growth_vector * length);
     
-    color = ofColor(0,0,0,255);
+    color = setColor();
     
     isRoot = false;
     
@@ -68,21 +68,47 @@ void ofxGrowthNode::update(){
         
         location = parent->location + (growth_vector * length);
     }
-    
-    
-    
+
     updateChildren();
 }
 
-//void ofxGrowthNode::updateColor(int driver){
-//    int t_driver = ofGetElapsedTimeMillis()/1000;
-//    
+//--------------------------------------------------------------
+void ofxGrowthNode::updateColor(int driver){
+    int t_driver = ofGetElapsedTimeMillis()/1000;
+    
+    color = ofColor(setColor().r,setColor().g,setColor().b,0.0 + ((tree.node_max / (distance_from_center + 1)*255)));
+    
 //    if(t_driver != driver){
-//        for (auto & child : children) {
-//            child->updateColor(driver);
-//        }
+        for (auto & child : children) {
+            child->updateColor(driver);
+        }
 //    }
-//}
+}
+
+//--------------------------------------------------------------
+ofColor ofxGrowthNode::setColor(){
+    ofColor c;
+    
+    switch (level) {
+        case 0:
+            c = ofColor(255,221,25,205);//yellowish
+            break;
+        case 1:
+            c = ofColor(143,177,178,205); //GRAY BLUE
+            break;
+        case 2:
+            c = ofColor(20,198,204,205); //blue
+            break;
+        case 3:
+            c = ofColor(255,0,170,205);//pink
+            break;
+        default:
+            c = ofColor(178,18,125,205);//dark pink
+            break;
+    }
+    
+    return c;
+}
 
 //--------------------------------------------------------------
 void ofxGrowthNode::generateChildren(){
@@ -101,4 +127,3 @@ void ofxGrowthNode::updateChildren(){
         child->update();
     }
 }
-

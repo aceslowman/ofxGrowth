@@ -11,13 +11,11 @@ class ofxGrowth: public ofThread {
 public:
 
     void setup();
-    void update();
-    
     void setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
+    
+    void update();
     void updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
     void updateNodes(int l, ofVec3f gv);
-    
-    ofColor colorLevels(int level);
     
     void drawMesh();
     
