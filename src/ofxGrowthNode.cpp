@@ -74,15 +74,14 @@ void ofxGrowthNode::update(){
 
 //--------------------------------------------------------------
 void ofxGrowthNode::updateColor(int driver){
-    int t_driver = ofGetElapsedTimeMillis()/1000;
+    float sine = (1.0 + sin(driver)) / 2.0;
+    float alpha = 0.0 + (tree.node_max)/(distance_from_center + 1);
     
-    color = ofColor(setColor().r,setColor().g,setColor().b,0.0 + ((tree.node_max / (distance_from_center + 1)*255)));
+    color = ofColor(setColor().r,setColor().g,setColor().b, alpha * 255);
     
-//    if(t_driver != driver){
-        for (auto & child : children) {
-            child->updateColor(driver);
-        }
-//    }
+    for (auto & child : children) {
+        child->updateColor(driver);
+    }
 }
 
 //--------------------------------------------------------------
