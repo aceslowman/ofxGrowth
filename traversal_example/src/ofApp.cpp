@@ -51,7 +51,7 @@ void ofApp::updateTree(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetBackgroundColor(ofFloatColor(1));
+    ofSetBackgroundColor(ofFloatColor(0.5));
     
     ofEnableAntiAliasing();
     ofEnableSmoothing();

@@ -39,7 +39,7 @@ void ofxGrowth::setup(){
 void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id){
     current_mesh->addVertex(current_node->location);
     current_mesh->addIndex(mesh_node_id);
-    current_mesh->addColor(colorLevels(current_node->level));
+    current_mesh->addColor(current_node->color);
     
     for(int i = 0; i < current_node->children.size(); i++){
         if(i > 0){
@@ -48,7 +48,7 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, i
             
             new_mesh->addVertex(current_node->location);
             new_mesh->addIndex(0);
-            new_mesh->addColor(colorLevels(current_node->level));
+            new_mesh->addColor(current_node->color);
             
             current_mesh = new_mesh.get();
             
@@ -78,7 +78,7 @@ void ofxGrowth::update(){
 //--------------------------------------------------------------
 void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id){
     current_mesh->setVertex(mesh_node_id, current_node->location);
-    current_mesh->setColor(mesh_node_id, colorLevels(current_node->level));
+    current_mesh->setColor(mesh_node_id, current_node->color);
     
     for(int i = 0; i < current_node->children.size(); i++){
         if(i > 0){
@@ -87,7 +87,7 @@ void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, 
             mesh_node_id = 0;
             
             current_mesh->setVertex(mesh_node_id, current_node->location);
-            current_mesh->setColor(mesh_node_id, colorLevels(current_node->level));
+            current_mesh->setColor(mesh_node_id, current_node->color);
             
             mesh_node_id = 1;
             

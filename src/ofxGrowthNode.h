@@ -13,7 +13,7 @@ public:
     ofxGrowth &tree;
     ofVec3f location;
     ofVec3f growth_vector;
-//    ofColor color;
+    ofColor color;
 
     int level;
     int distance_from_center;
@@ -27,7 +27,7 @@ public:
     void generateChildren();
     void updateChildren();
     
-//    void updateColor(int driver);
+    void updateColor(int driver);
     
     float lengthRandom;
     ofVec3f growthVectorRandom;
