@@ -31,6 +31,11 @@ public:
     
     int current_mesh_id;
     
+    
+    int traversal_node;
+    int traversal_speed;
+    
+    
     ofVec3f growth_vector;
     ofVec3f origin;
     
@@ -46,4 +51,6 @@ public:
     ofxGrowthNode * cap_current_node;
     
     int driver;
+    
+    bool b_traverse;
 };

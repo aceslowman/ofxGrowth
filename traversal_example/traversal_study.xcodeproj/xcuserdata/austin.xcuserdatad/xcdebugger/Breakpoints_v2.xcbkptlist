@@ -9,44 +9,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/ofApp.cpp"
-            timestampString = "509949608.250154"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "ofApp::updateTree()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "src/ofApp.cpp"
-            timestampString = "509949608.250154"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "ofApp::keyPressed(int key)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "../../../addons/ofxGrowth/src/ofxGrowthNode.cpp"
-            timestampString = "509775423.024162"
+            timestampString = "510034037.466058"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "ofxGrowthNode::update()"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../addons/ofxGrowth/src/ofxGrowthNode.cpp"
-            timestampString = "509775423.024162"
+            timestampString = "510034037.466058"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
@@ -74,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/ofxGrowth.cpp"
-            timestampString = "509947863.269145"
+            timestampString = "510033681.447655"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id)"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/ofxGrowthNode.cpp"
-            timestampString = "509952099.92365"
+            timestampString = "510034037.466058"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
             landmarkName = "ofxGrowthNode::updateColor(int driver)"
             landmarkType = "7">
          </BreakpointContent>

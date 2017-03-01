@@ -3,16 +3,24 @@
 //--------------------------------------------------------------
 ofxGrowth::ofxGrowth(){
     node_max    = 40.0;
-    length      = 30.0;
+    
+    traversal_node = 0;
+    traversal_speed = 200;
+    
+    
     crookedness = 0.2;
     density     = 0.08;
     depth       = 2;
     dim_f       = 0.5;
     growth_vector = ofVec3f(0,1,0);
+    length      = 30.0;
+    
+    
     origin = ofVec3f(0,0,0);
     stroke_width= 2.0;
+    
+    b_traverse = false;
 }
-
 ofxGrowth::~ofxGrowth(){}
 
 //--------------------------------------------------------------
@@ -68,8 +76,17 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, i
 
 //--------------------------------------------------------------
 void ofxGrowth::update(){
+    
+    /* */
+    traversal_node = ofWrap(ofGetElapsedTimeMillis()/traversal_speed,0,node_max);
+    /* */
+    
     current_mesh_id = 0;
     root->update();
+    
+    if(b_traverse){
+        root->updateColor(ofGetElapsedTimeMillis()/traversal_speed);
+    }
     
     ofSetLineWidth(stroke_width);
     updateMesh(root, meshes[0].get(),0);

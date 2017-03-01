@@ -60,7 +60,8 @@ void ofxGrowthNode::update(){
         
         location = tree.origin + (growth_vector * length);
     }else{
-        growth_vector = ofVec3f(
+        
+        growth_vector = ofVec3f(  // (parent vector) + (random crookedness)
             ofClamp(parent->growth_vector.x + (growthVectorRandom.x * tree.crookedness),-1.0,1.0),
             ofClamp(parent->growth_vector.y + (growthVectorRandom.y * tree.crookedness),-1.0,1.0),
             ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
@@ -72,10 +73,15 @@ void ofxGrowthNode::update(){
     updateChildren();
 }
 
-//--------------------------------------------------------------
+//-------------------------------`-------------------------------
 void ofxGrowthNode::updateColor(int driver){
-    float sine = (1.0 + sin(driver)) / 2.0;
-    float alpha = 0.0 + (tree.node_max)/(distance_from_center + 1);
+    float sine;
+    float alpha;
+    
+    if(tree.b_traverse){
+        sine = (1.0 + sin(driver)) / 2.0;
+        alpha = 0.0 + (tree.traversal_node)/(distance_from_center + 1);
+    }
     
     color = ofColor(setColor().r,setColor().g,setColor().b, alpha * 255);
     
@@ -90,19 +96,19 @@ ofColor ofxGrowthNode::setColor(){
     
     switch (level) {
         case 0:
-            c = ofColor(255,221,25,205);//yellowish
+            c = ofColor(255,221,25,205); //yellowish
             break;
         case 1:
-            c = ofColor(143,177,178,205); //GRAY BLUE
+            c = ofColor(143,177,178,205);//GRAY BLUE
             break;
         case 2:
             c = ofColor(20,198,204,205); //blue
             break;
         case 3:
-            c = ofColor(255,0,170,205);//pink
+            c = ofColor(255,0,170,205);  //pink
             break;
         default:
-            c = ofColor(178,18,125,205);//dark pink
+            c = ofColor(178,18,125,205); //dark pink
             break;
     }
     
