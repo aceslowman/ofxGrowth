@@ -8,7 +8,6 @@ void ofApp::setup(){
     growth_gui.add(length.set("LENGTH",20.0,1.0,200.0));
     growth_gui.add(density.set("DENSITY",0.6,0.0,1.0));
     growth_gui.add(crookedness.set("CROOK",0.3,0.0,2.0));
-//    growth_gui.add(growth_vector.set("GROWTH VECTOR",ofVec3f(0,200,0),ofVec3f(-200,-200,-200),ofVec3f(200,200,200)));
     growth_gui.add(growth_vector.set("GROWTH VECTOR",ofVec3f(0,1,0),ofVec3f(-1,-1,-1),ofVec3f(1,1,1)));
     growth_gui.add(stroke_width.set("STROKE WIDTH",2.0,0.0,10.0));
     growth_gui.add(b_traverse.set("Animated Traversal?",false));
@@ -25,23 +24,26 @@ void ofApp::setup(){
     
     ofAddListener(growth_gui.parameterChangedE(), this, &ofApp::onParamChange);
     ofAddListener(movement_gui.parameterChangedE(), this, &ofApp::onParamChange);
+    
+    useEasyCam = false;
 }
 
 void ofApp::onParamChange(ofAbstractParameter& e){
-    update();
-}
-
-//--------------------------------------------------------------
-void ofApp::update(){
-    if(b_lfo_1)
-        crookedness = (sin((ofGetElapsedTimef())/2.0)*lfo_1_rate)*10.0;
-    
     updateTree();
     growth.update();
 }
 
 //--------------------------------------------------------------
+void ofApp::update(){
+    if(b_traverse)
+        growth.update();
+}
+
+//--------------------------------------------------------------
 void ofApp::updateTree(){
+    if(b_lfo_1)
+        crookedness = (sin((ofGetElapsedTimef())/2.0)*lfo_1_rate)*10.0;
+    
     growth.depth = depth.get();
     growth.node_max = node_max.get();
     growth.length = length.get();
@@ -61,6 +63,10 @@ void ofApp::draw(){
     ofEnableSmoothing();
     ofEnableAlphaBlending();
     cam.begin();
+    if(!useEasyCam){
+        cam.orbit(ofGetElapsedTimef()*15, -10, 400);
+        cam.move(0,100,0);
+    }
     growth.drawMesh();
     drawEuler();
     cam.end();
@@ -83,6 +89,9 @@ void ofApp::keyPressed(int key){
     }
     if(key == 'b'){
         ofResetElapsedTimeCounter();
+    }
+    if(key == 'r'){
+        useEasyCam = !useEasyCam;
     }
 }
 

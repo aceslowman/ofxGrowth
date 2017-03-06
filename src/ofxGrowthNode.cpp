@@ -54,6 +54,7 @@ void ofxGrowthNode::setup(){
 //--------------------------------------------------------------
 void ofxGrowthNode::update(){
     float length = (tree.length * pow(tree.dim_f,level))*lengthRandom;
+//    growthVectorRandom = growthVectorRandom + (ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()*0.1));
     
     if(isRoot){
         growth_vector = tree.growth_vector;

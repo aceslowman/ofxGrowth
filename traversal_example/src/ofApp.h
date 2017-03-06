@@ -50,6 +50,8 @@ class ofApp : public ofBaseApp{
     ofParameter<bool> b_lfo_1;
     ofParameter<float> saw_1_rate;
     
+    bool useEasyCam;
+    
     
     void onParamChange(ofAbstractParameter& e);
     

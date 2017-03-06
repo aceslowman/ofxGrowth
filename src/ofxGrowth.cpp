@@ -28,7 +28,7 @@ void ofxGrowth::setup(){
     root = new ofxGrowthNode(*this);
     num_nodes = 0;
     
-    unique_ptr<ofMesh> mesh = make_unique<ofMesh>();
+    unique_ptr<ofVboMesh> mesh = make_unique<ofVboMesh>();
     mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
     ofSetLineWidth(stroke_width);
     
@@ -44,14 +44,56 @@ void ofxGrowth::setup(){
 }
 
 //--------------------------------------------------------------
-void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id){
+void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id){
+//    current_mesh->addVertex(current_node->location);
+//    current_mesh->addIndex(mesh_node_id);
+//    current_mesh->addColor(current_node->color);
+//    
+//    for(int i = 0; i < current_node->children.size(); i++){
+//        if(i > 0){
+//            unique_ptr<ofVboMesh> new_mesh = make_unique<ofVboMesh>();
+//            new_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
+//            
+//            new_mesh->addVertex(current_node->location);
+//            new_mesh->addIndex(0);
+//            new_mesh->addColor(current_node->color);
+//            
+//            current_mesh = new_mesh.get();
+//            
+//            meshes.push_back(move(new_mesh));
+//            new_mesh.release();
+//            mesh_node_id = 0;
+//        }
+//        
+//        mesh_node_id++;
+//        
+//        current_node = current_node->children[i].get();
+//        setupMesh(current_node, current_mesh, mesh_node_id);
+//        
+//        num_nodes++;
+//    }
+    ofVec3f current_vector;
+    
+    if(current_node->parent != NULL){
+        current_vector = current_node->parent->location.getPerpendicular(current_node->location);
+    }else{
+        current_vector = growth_vector;
+    }
+    
     current_mesh->addVertex(current_node->location);
+//    
+//    current_mesh->addVertex(current_node->location - (current_vector));
+//    current_mesh->addVertex(current_node->location + (current_vector));
+//    
+//    current_mesh->addIndex(mesh_node_id);
+//    current_mesh->addColor(current_node->color);
+    
     current_mesh->addIndex(mesh_node_id);
     current_mesh->addColor(current_node->color);
     
     for(int i = 0; i < current_node->children.size(); i++){
         if(i > 0){
-            unique_ptr<ofMesh> new_mesh = make_unique<ofMesh>();
+            unique_ptr<ofVboMesh> new_mesh = make_unique<ofVboMesh>();
             new_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
             
             new_mesh->addVertex(current_node->location);
@@ -93,7 +135,7 @@ void ofxGrowth::update(){
 }
 
 //--------------------------------------------------------------
-void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id){
+void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id){
     current_mesh->setVertex(mesh_node_id, current_node->location);
     current_mesh->setColor(mesh_node_id, current_node->color);
     

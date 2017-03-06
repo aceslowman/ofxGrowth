@@ -4,17 +4,17 @@
 #include "ofxGrowthNode.h"
 #include "ofThread.h"
 
-class ofxGrowth: public ofThread {
+class ofxGrowth{
     
     
     
 public:
 
     void setup();
-    void setupMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
+    void setupMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id);
     
     void update();
-    void updateMesh(ofxGrowthNode * current_node, ofMesh * current_mesh, int mesh_node_id);
+    void updateMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id);
     void updateNodes(int l, ofVec3f gv);
     
     void drawMesh();
@@ -42,12 +42,12 @@ public:
     ofxGrowth();
     ~ofxGrowth();
     
-    vector<unique_ptr<ofMesh>> meshes;
+    vector<unique_ptr<ofVboMesh>> meshes;
     ofxGrowthNode * root;
     
     int cap_mesh_node_id;
     int cap_current_mesh_id;
-    ofMesh * cap_current_mesh;
+    ofVboMesh * cap_current_mesh;
     ofxGrowthNode * cap_current_node;
     
     int driver;
