@@ -19,7 +19,7 @@ ofxGrowth::ofxGrowth(){
     
     b_traverse = false;
     
-    // make ellipse to draw along the length of the ptf
+    //ptf testing
     mesh_ellipse.setMode(OF_PRIMITIVE_LINE_LOOP);
     unsigned numVerts = 20;
     float w = 5;
@@ -112,6 +112,9 @@ void ofxGrowth::update(){
     /* */
     
     current_mesh_id = 0;
+    for (auto & ptf : ptfs) {
+        ptf->clear();
+    }
     root->update();
     
     if(b_traverse){
@@ -167,11 +170,8 @@ void ofxGrowth::drawMesh(){
         {
             ofPushMatrix();
             
-            // multiply current matrix (rotated around x axis)
-            // by transform for next frame
             ofMultMatrix(ptfs[i].get()->frameAt(j));
             
-            // draw ellipse
             mesh_ellipse.draw();
             
             ofPopMatrix();
