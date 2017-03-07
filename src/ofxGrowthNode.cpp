@@ -95,23 +95,24 @@ void ofxGrowthNode::updateColor(int driver){
 ofColor ofxGrowthNode::setColor(){
     ofColor c;
     
-    switch (level) {
-        case 0:
-            c = ofColor(255,221,25,205); //yellowish
-            break;
-        case 1:
-            c = ofColor(143,177,178,205);//GRAY BLUE
-            break;
-        case 2:
-            c = ofColor(20,198,204,205); //blue
-            break;
-        case 3:
-            c = ofColor(255,0,170,205);  //pink
-            break;
-        default:
-            c = ofColor(178,18,125,205); //dark pink
-            break;
-    }
+//    switch (level) {
+//        case 0:
+//            c = ofColor(255,221,25,205); //yellowish
+//            break;
+//        case 1:
+//            c = ofColor(143,177,178,205);//GRAY BLUE
+//            break;
+//        case 2:
+//            c = ofColor(20,198,204,205); //blue
+//            break;
+//        case 3:
+//            c = ofColor(255,0,170,205);  //pink
+//            break;
+//        default:
+//            c = ofColor(178,18,125,205); //dark pink
+//            break;
+//    }
+    c = ofColor(255);
     
     return c;
 }
