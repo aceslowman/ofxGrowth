@@ -9,6 +9,7 @@ class ofxGrowthNode {
 public:
     
     bool isRoot;
+    bool b2d3d;
 
     ofxGrowth &tree;
     ofVec3f location;

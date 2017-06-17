@@ -44,6 +44,7 @@ class ofApp : public ofBaseApp{
     ofParameter<float> crookedness;
     ofParameter<ofVec3f> growth_vector;
     ofParameter<bool> b_traverse;
+    ofParameter<bool> b2d3d;
     
     ofParameterGroup movement_gui;
     ofParameter<float> lfo_1_rate;

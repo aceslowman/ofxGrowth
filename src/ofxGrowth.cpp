@@ -18,6 +18,7 @@ ofxGrowth::ofxGrowth(){
     stroke_width= 2.0;
     
     b_traverse = false;
+    b2d3d = true;
 }
 ofxGrowth::~ofxGrowth(){}
 

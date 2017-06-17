@@ -4,6 +4,7 @@
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     parent = NULL;
     isRoot = true;
+    b2d3d  = tree.b2d3d;
     
     lengthRandom         = ofRandomuf();
     growthVectorRandom   = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
@@ -19,17 +20,19 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
 }
 
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), parent(p) {
+    b2d3d  = tree.b2d3d;
     lengthRandom = ofRandomuf();
-    growthVectorRandom = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     
-    distance_from_center = parent->distance_from_center + 1;
-    level              = lvl;
+    growthVectorRandom = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     
     growth_vector = ofVec3f(
                             ofClamp(parent->growth_vector.x + (growthVectorRandom.x * tree.crookedness),-1.0,1.0),
                             ofClamp(parent->growth_vector.y + (growthVectorRandom.y * tree.crookedness),-1.0,1.0),
-                            ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
-                            );
+                            (b2d3d) ? ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
+                            : 0);
+
+    distance_from_center = parent->distance_from_center + 1;
+    level              = lvl;
     
     float length = pow(tree.dim_f,level)*lengthRandom;
     
@@ -64,8 +67,8 @@ void ofxGrowthNode::update(){
         growth_vector = ofVec3f(  // (parent vector) + (random crookedness)
             ofClamp(parent->growth_vector.x + (growthVectorRandom.x * tree.crookedness),-1.0,1.0),
             ofClamp(parent->growth_vector.y + (growthVectorRandom.y * tree.crookedness),-1.0,1.0),
-            ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
-        );
+            (b2d3d) ? ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
+            : 0);
         
         location = parent->location + (growth_vector * length);
     }
@@ -73,7 +76,7 @@ void ofxGrowthNode::update(){
     updateChildren();
 }
 
-//-------------------------------`-------------------------------
+//--------------------------------------------------------------
 void ofxGrowthNode::updateColor(int driver){
     float sine;
     float alpha;

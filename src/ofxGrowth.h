@@ -35,6 +35,8 @@ public:
     float density;      //how often do branches emerge from nodes
     float dim_f;        //how much shorter does each successive branch become?
     int   depth;        //how many levels of branches are there?
+    
+    bool b2d3d;
 
     /*
      DRAWING PARAMETERS

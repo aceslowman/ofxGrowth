@@ -10,12 +10,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/ofxGrowthNode.cpp"
-            timestampString = "519410363.245345"
+            timestampString = "519411457.568579"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "ofxGrowthNode::updateColor(int driver)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/ofxGrowthNode.cpp"
+            timestampString = "519411457.568579"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "ofxGrowthNode::ofxGrowthNode(ofxGrowth &amp;t, ofxGrowthNode* p, int lvl)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -12,6 +12,7 @@ void ofApp::setup(){
     growth_gui.add(growth_vector.set("GROWTH VECTOR",ofVec3f(0,1,0),ofVec3f(-1,-1,-1),ofVec3f(1,1,1)));
     growth_gui.add(stroke_width.set("STROKE WIDTH",2.0,0.0,10.0));
     growth_gui.add(b_traverse.set("Animated Traversal?",false));
+    growth_gui.add(b2d3d.set("2D or 3D",true));
     
     movement_gui.add(lfo_1_rate.set("LFO Crooked Rate",0.0,0.0,10.0));
     movement_gui.add(b_lfo_1.set("LFO Crooked On/Off",false));
@@ -55,6 +56,7 @@ void ofApp::updateTree(){
     growth.traversal_speed = saw_1_rate.get();
     growth.b_traverse = b_traverse.get();
     growth.dim_f = diminish.get();
+    growth.b2d3d = b2d3d.get();
 }
 
 //--------------------------------------------------------------
