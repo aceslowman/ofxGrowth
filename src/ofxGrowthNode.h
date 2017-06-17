@@ -17,6 +17,7 @@ public:
     ofColor color;
 
     int level;
+    float length;
     int distance_from_center;
     
     ofxGrowthNode * parent;

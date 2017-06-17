@@ -34,7 +34,7 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), 
     distance_from_center = parent->distance_from_center + 1;
     level              = lvl;
     
-    float length = pow(tree.dim_f,level)*lengthRandom;
+    length = pow(tree.dim_f,level)*lengthRandom;
     
     location = parent->location + (growth_vector * length);
     
@@ -56,7 +56,7 @@ void ofxGrowthNode::setup(){
 
 //--------------------------------------------------------------
 void ofxGrowthNode::update(){
-    float length = pow(tree.dim_f,level)*lengthRandom;
+    length = pow(tree.dim_f,level)*lengthRandom;
     
     if(isRoot){
         growth_vector = tree.growth_vector;

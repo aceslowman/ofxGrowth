@@ -141,18 +141,28 @@ void ofxGrowth::drawMesh(){
         ofPopMatrix();
     }
     
-    drawDebug();
+//    drawDebug();
 }
 
 //--------------------------------------------------------------
 void ofxGrowth::drawDebug(){
     for(int i = 0; i < nodes.size(); i++){
+        ofxGrowthNode * node = nodes[i];
+        ofVec3f location = node->parent->location;
+        ofVec3f growth = node->growth_vector;
+        float node_length = node->length;
+        
         ofPushMatrix();
         ofScale(length,length,length);
-        ofTranslate(nodes[i]->location);
+        ofTranslate(location);
         ofColor(255);
-        
-        ofDrawBitmapString("Test",0,0,0);
+        ofFill();
+//        ofDrawSphere(0,0,0.05);
+        ofNoFill();
+//        ofDrawCircle(0,0,0,node_length);
+//        ofDrawLine(0,0,0,growth.x,growth.y,growth.z);
+        ofDrawBitmapString("Length: " + ofToString(length), location);
+        ofDrawBitmapString("Growth: " + ofToString(growth), location.x, location.y + 0.04, location.z);
         ofPopMatrix();
     }
 }
