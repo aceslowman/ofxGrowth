@@ -31,10 +31,9 @@ public:
     void updateColor();
     
     void updateColor(int driver);
-    
+
     float lengthRandom;
-    ofVec3f growthVectorRandom;
-    
+    ofVec3f growthVectorRandom;    
     
     ofxGrowthNode(ofxGrowth &t);
     ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl);

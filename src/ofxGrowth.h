@@ -43,8 +43,6 @@ public:
     */
     int stroke_width;   //how thick are the branches drawn? (line)
     
-
-    
     /*
      TRAVERSAL PARAMETERS
     */
@@ -57,16 +55,10 @@ public:
     ofVboMesh * cap_current_mesh;
     ofxGrowthNode * cap_current_node;
     
-
-    
+    vector<ofxGrowthNode*> nodes;
     vector<unique_ptr<ofVboMesh>> meshes;
     ofxGrowthNode * root;
     
-
-    
-    ofVboMesh mesh_ellipse;
-    
     int driver;
-    
     bool b_traverse;
 };

@@ -27,7 +27,7 @@ void ofApp::setup(){
     ofAddListener(growth_gui.parameterChangedE(), this, &ofApp::onParamChange);
     ofAddListener(movement_gui.parameterChangedE(), this, &ofApp::onParamChange);
     
-    useEasyCam = false;
+    useEasyCam = true;
 }
 
 void ofApp::onParamChange(ofAbstractParameter& e){

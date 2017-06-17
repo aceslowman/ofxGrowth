@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 ofxGrowth::ofxGrowth(){
-    node_max    = 40.0;
+    node_max    = 10.0;
     
     traversal_node = 0;
     traversal_speed = 200;
@@ -76,6 +76,8 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh
         mesh_node_id++;
 
         current_node = current_node->children[i].get();
+        nodes.push_back(current_node);
+        
         setupMesh(current_node, current_mesh, mesh_node_id);
 
         num_nodes++;
@@ -138,9 +140,19 @@ void ofxGrowth::drawMesh(){
         meshes[i].get()->draw();
         ofPopMatrix();
     }
+    
+    drawDebug();
 }
 
 //--------------------------------------------------------------
 void ofxGrowth::drawDebug(){
-
+    for(int i = 0; i < nodes.size(); i++){
+        ofPushMatrix();
+        ofScale(length,length,length);
+        ofTranslate(nodes[i]->location);
+        ofColor(255);
+        
+        ofDrawBitmapString("Test",0,0,0);
+        ofPopMatrix();
+    }
 }
