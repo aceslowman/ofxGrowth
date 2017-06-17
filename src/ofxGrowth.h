@@ -18,26 +18,8 @@ public:
     void drawMesh();
     void drawDebug();
     
-    int num_nodes;
-    
-    /*
-     TREE PARAMETERS
-    */
-    float length;       //length of the entire tree
-    float crookedness;
-    float density;
-    float dim_f;
-    int   depth;
-    
-    
-
-    int stroke_width;
-    
+    int num_nodes;      //how many nodes are currently in the tree?
     int current_mesh_id;
-    
-    int node_max;
-    int traversal_node;
-    int traversal_speed;
     
     ofVec3f growth_vector;
     ofVec3f origin;
@@ -45,13 +27,40 @@ public:
     ofxGrowth();
     ~ofxGrowth();
     
-    vector<unique_ptr<ofVboMesh>> meshes;
-    ofxGrowthNode * root;
+    /*
+     TREE PARAMETERS
+    */
+    float length;       //how long is the entire tree?
+    float crookedness;  //how crooked are the branches on the tree?
+    float density;      //how often do branches emerge from nodes
+    float dim_f;        //how much shorter does each successive branch become?
+    int   depth;        //how many levels of branches are there?
+
+    /*
+     DRAWING PARAMETERS
+    */
+    int stroke_width;   //how thick are the branches drawn? (line)
+    
+
+    
+    /*
+     TRAVERSAL PARAMETERS
+    */
+    int node_max;
+    int traversal_node;
+    int traversal_speed;
     
     int cap_mesh_node_id;
     int cap_current_mesh_id;
     ofVboMesh * cap_current_mesh;
     ofxGrowthNode * cap_current_node;
+    
+
+    
+    vector<unique_ptr<ofVboMesh>> meshes;
+    ofxGrowthNode * root;
+    
+
     
     ofVboMesh mesh_ellipse;
     
