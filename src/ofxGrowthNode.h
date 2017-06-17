@@ -21,7 +21,6 @@ public:
     ofxGrowthNode * parent;
     vector<unique_ptr<ofxGrowthNode>> children;
 
-    
     void setup();
     void update();
     void generateChildren();

@@ -3,19 +3,16 @@
 #include "ofMain.h"
 #include "ofxGrowthNode.h"
 #include "ofThread.h"
-#include "ofxPtf.h"
 
 class ofxGrowth{
-    
-    
     
 public:
 
     void setup();
-    void setupMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, ofxPtf * current_ptf, int mesh_node_id);
+    void setupMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id);
     
     void update();
-    void updateMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, ofxPtf * current_ptf, int mesh_node_id);
+    void updateMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id);
     void updateNodes(int l, ofVec3f gv);
     
     void drawMesh();
@@ -43,7 +40,6 @@ public:
     ~ofxGrowth();
     
     vector<unique_ptr<ofVboMesh>> meshes;
-    vector<unique_ptr<ofxPtf>> ptfs;
     ofxGrowthNode * root;
     
     int cap_mesh_node_id;

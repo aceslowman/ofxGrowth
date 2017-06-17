@@ -41,6 +41,7 @@ class ofApp : public ofBaseApp{
     ofParameter<int> stroke_width;
     ofParameter<float> length;
     ofParameter<float> density;
+    ofParameter<float> diminish;
     ofParameter<float> crookedness;
     ofParameter<ofVec3f> growth_vector;
     ofParameter<bool> b_traverse;

@@ -7,6 +7,7 @@ void ofApp::setup(){
     growth_gui.add(node_max.set("MAX # OF BR NODES",40,1,200));
     growth_gui.add(length.set("LENGTH",20.0,1.0,200.0));
     growth_gui.add(density.set("DENSITY",0.6,0.0,1.0));
+    growth_gui.add(diminish.set("DIM FACTOR", 0.2, 0.0, 1.0));
     growth_gui.add(crookedness.set("CROOK",0.3,0.0,2.0));
     growth_gui.add(growth_vector.set("GROWTH VECTOR",ofVec3f(0,1,0),ofVec3f(-1,-1,-1),ofVec3f(1,1,1)));
     growth_gui.add(stroke_width.set("STROKE WIDTH",2.0,0.0,10.0));
@@ -53,6 +54,7 @@ void ofApp::updateTree(){
     growth.stroke_width = stroke_width.get();
     growth.traversal_speed = saw_1_rate.get();
     growth.b_traverse = b_traverse.get();
+    growth.dim_f = diminish.get();
 }
 
 //--------------------------------------------------------------
