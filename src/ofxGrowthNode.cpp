@@ -31,7 +31,7 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), 
                             ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
                             );
     
-    float length = (tree.length * pow(tree.dim_f,level))*lengthRandom;
+    float length = pow(tree.dim_f,level)*lengthRandom;
     
     location = parent->location + (growth_vector * length);
     
@@ -53,8 +53,7 @@ void ofxGrowthNode::setup(){
 
 //--------------------------------------------------------------
 void ofxGrowthNode::update(){
-    float length = (tree.length * pow(tree.dim_f,level))*lengthRandom;
-//    growthVectorRandom = growthVectorRandom + (ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()*0.1));
+    float length = pow(tree.dim_f,level)*lengthRandom;
     
     if(isRoot){
         growth_vector = tree.growth_vector;

@@ -16,20 +16,26 @@ public:
     void updateNodes(int l, ofVec3f gv);
     
     void drawMesh();
+    void drawDebug();
     
     int num_nodes;
     
-    float length;
+    /*
+     TREE PARAMETERS
+    */
+    float length;       //length of the entire tree
     float crookedness;
     float density;
     float dim_f;
-    int depth;
-    int node_max;
+    int   depth;
+    
+    
+
     int stroke_width;
     
     int current_mesh_id;
     
-    
+    int node_max;
     int traversal_node;
     int traversal_speed;
     

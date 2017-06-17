@@ -132,6 +132,14 @@ void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofVboMesh * current_mes
 //--------------------------------------------------------------
 void ofxGrowth::drawMesh(){
     for(int i = 0; i < meshes.size(); i++){
+        ofPushMatrix();
+        ofScale(length,length,length);
         meshes[i].get()->draw();
+        ofPopMatrix();
     }
+}
+
+//--------------------------------------------------------------
+void ofxGrowth::drawDebug(){
+
 }

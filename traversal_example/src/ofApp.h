@@ -34,7 +34,6 @@ class ofApp : public ofBaseApp{
     ofxPanel gui;
     ofParameterGroup growth_gui;
     
-    
     ofParameter<int> depth;
     ofParameter<int> traversal_speed;
     ofParameter<int> node_max;
@@ -52,7 +51,6 @@ class ofApp : public ofBaseApp{
     ofParameter<float> saw_1_rate;
     
     bool useEasyCam;
-    
     
     void onParamChange(ofAbstractParameter& e);
     
