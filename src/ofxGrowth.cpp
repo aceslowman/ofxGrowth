@@ -2,11 +2,9 @@
 
 //--------------------------------------------------------------
 ofxGrowth::ofxGrowth(){
+	origin = ofVec3f(0, 0, 0);
+
     node_max    = 10.0;
-    
-    traversal_node = 0;
-    traversal_speed = 200;
-    
     crookedness = 0.2;
     density     = 0.08;
     depth       = 2;
@@ -14,136 +12,24 @@ ofxGrowth::ofxGrowth(){
     growth_vector = ofVec3f(0,1,0);
     length      = 30.0;
     
-    origin = ofVec3f(0,0,0);
-    stroke_width= 2.0;
-    
-    b_traverse = false;
     b2d3d = true;
 }
-ofxGrowth::~ofxGrowth(){}
+
+ofxGrowth::~ofxGrowth(){
+	ofLog(OF_LOG_NOTICE, "Deleting tree...");
+}
 
 //--------------------------------------------------------------
-void ofxGrowth::setup(){
+void ofxGrowth::setupTree(){
     root = new ofxGrowthNode(*this);
     num_nodes = 0;
+	ofLog(OF_LOG_NOTICE, "New tree has been set up");
 }
 
-//--------------------------------------------------------------
-void ofxGrowth::setupLines(){
-    unique_ptr<ofVboMesh> mesh = make_unique<ofVboMesh>();
-    mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
-    ofSetLineWidth(stroke_width);
-    
-    meshes.push_back(move(mesh));
-    
-    createLines(root, meshes.back().get(), 0);
-    
-    cap_current_mesh_id = 0;
-    cap_mesh_node_id = 0;
-    cap_current_mesh = meshes[0].get();
-    cap_current_node = root;
-    cap_mesh_node_id = 0;
-}
+
 
 //--------------------------------------------------------------
-// THIS METHOD SHOULD ONLY DEAL WITH SETTING UP THE LINES
-void ofxGrowth::createLines(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id){
-    ofVec3f current_vector;
-    
-    if(current_node->parent != NULL){
-        current_vector = current_node->parent->location.getPerpendicular(current_node->location);
-    }else{
-        current_vector = growth_vector;
-    }
-    
-    current_mesh->addVertex(current_node->location);
-    current_mesh->addIndex(mesh_node_id);
-    current_mesh->addColor(current_node->color);
-    
-    for(int i = 0; i < current_node->children.size(); i++){
-        if(i > 0){
-            unique_ptr<ofVboMesh> new_mesh = make_unique<ofVboMesh>();
-            new_mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
-            
-            new_mesh->addVertex(current_node->location);
-            new_mesh->addIndex(0);
-            new_mesh->addColor(current_node->color);
-            
-            current_mesh = new_mesh.get();
-
-            meshes.push_back(move(new_mesh));
-            new_mesh.release();
-            
-            mesh_node_id = 0;
-        }
-        
-        mesh_node_id++;
-
-        current_node = current_node->children[i].get();
-        nodes.push_back(current_node);
-        
-        createLines(current_node, current_mesh, mesh_node_id);
-
-        num_nodes++;
-    }
-}
-
-//--------------------------------------------------------------
-void ofxGrowth::update(){
-    
-    /* */
-    traversal_node = ofWrap(ofGetElapsedTimeMillis()/traversal_speed,0,node_max);
-    /* */
-    
-    current_mesh_id = 0;
-
+void ofxGrowth::updateTree(){
     root->update();
-    
-    if(b_traverse){
-        root->updateColor(ofGetElapsedTimeMillis()/traversal_speed);
-    }
-    
-    ofSetLineWidth(stroke_width);
-    updateLines(root, meshes[0].get(), 0);
 }
 
-//--------------------------------------------------------------
-void ofxGrowth::updateLines(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id){
-    current_mesh->setVertex(mesh_node_id, current_node->location);
-    current_mesh->setColor(mesh_node_id, current_node->color);
-    
-    for(int i = 0; i < current_node->children.size(); i++){
-        if(i > 0){
-            current_mesh = meshes[current_mesh_id + 1].get();
-            current_mesh_id = current_mesh_id + 1;
-            mesh_node_id = 0;
-            
-            current_mesh->setVertex(mesh_node_id, current_node->location);
-            current_mesh->setColor(mesh_node_id, current_node->color);
-            
-            mesh_node_id = 1;
-            
-            current_node = current_node->children[i].get();
-
-            updateLines(current_node, current_mesh, mesh_node_id);
-        }else{
-            mesh_node_id++;
-            
-            current_node = current_node->children[i].get();
-            
-            updateLines(current_node, current_mesh, mesh_node_id);
-        }
-    }
-}
-
-//--------------------------------------------------------------
-void ofxGrowth::drawLines(){
-    for(int i = 0; i < meshes.size(); i++){
-        ofPushMatrix();
-        ofScale(length,length,length);
-        meshes[i].get()->draw();
-        ofPopMatrix();
-    }
-    
-//    drawDebug();
-}

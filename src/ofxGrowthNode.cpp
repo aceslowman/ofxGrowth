@@ -44,7 +44,9 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), 
     setup();
 }
 
-ofxGrowthNode::~ofxGrowthNode(){}
+ofxGrowthNode::~ofxGrowthNode(){
+	ofLog(OF_LOG_NOTICE, "Deleting node...");
+}
 
 //--------------------------------------------------------------
 void ofxGrowthNode::setup(){
@@ -80,10 +82,10 @@ void ofxGrowthNode::updateColor(int driver){
     float sine;
     float alpha;
     
-    if(tree.b_traverse){
-        sine = (1.0 + sin(driver)) / 2.0;
-        alpha = 0.0 + (tree.traversal_node)/(distance_from_center + 1);
-    }
+    //if(tree.b_traverse){
+    //    sine = (1.0 + sin(driver)) / 2.0;
+    //    alpha = 0.0 + (tree.traversal_node)/(distance_from_center + 1);
+    //}
     
     color = ofColor(setColor().r,setColor().g,setColor().b, alpha * 255);
     
