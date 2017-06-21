@@ -26,14 +26,17 @@ ofxGrowth::~ofxGrowth(){}
 void ofxGrowth::setup(){
     root = new ofxGrowthNode(*this);
     num_nodes = 0;
-    
+}
+
+//--------------------------------------------------------------
+void ofxGrowth::setupLines(){
     unique_ptr<ofVboMesh> mesh = make_unique<ofVboMesh>();
     mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
     ofSetLineWidth(stroke_width);
     
     meshes.push_back(move(mesh));
     
-    setupMesh(root, meshes.back().get(), 0);
+    createLines(root, meshes.back().get(), 0);
     
     cap_current_mesh_id = 0;
     cap_mesh_node_id = 0;
@@ -43,7 +46,8 @@ void ofxGrowth::setup(){
 }
 
 //--------------------------------------------------------------
-void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id){
+// THIS METHOD SHOULD ONLY DEAL WITH SETTING UP THE LINES
+void ofxGrowth::createLines(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id){
     ofVec3f current_vector;
     
     if(current_node->parent != NULL){
@@ -78,7 +82,7 @@ void ofxGrowth::setupMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh
         current_node = current_node->children[i].get();
         nodes.push_back(current_node);
         
-        setupMesh(current_node, current_mesh, mesh_node_id);
+        createLines(current_node, current_mesh, mesh_node_id);
 
         num_nodes++;
     }
@@ -100,11 +104,11 @@ void ofxGrowth::update(){
     }
     
     ofSetLineWidth(stroke_width);
-    updateMesh(root, meshes[0].get(), 0);
+    updateLines(root, meshes[0].get(), 0);
 }
 
 //--------------------------------------------------------------
-void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id){
+void ofxGrowth::updateLines(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id){
     current_mesh->setVertex(mesh_node_id, current_node->location);
     current_mesh->setColor(mesh_node_id, current_node->color);
     
@@ -121,19 +125,19 @@ void ofxGrowth::updateMesh(ofxGrowthNode * current_node, ofVboMesh * current_mes
             
             current_node = current_node->children[i].get();
 
-            updateMesh(current_node, current_mesh, mesh_node_id);
+            updateLines(current_node, current_mesh, mesh_node_id);
         }else{
             mesh_node_id++;
             
             current_node = current_node->children[i].get();
             
-            updateMesh(current_node, current_mesh, mesh_node_id);
+            updateLines(current_node, current_mesh, mesh_node_id);
         }
     }
 }
 
 //--------------------------------------------------------------
-void ofxGrowth::drawMesh(){
+void ofxGrowth::drawLines(){
     for(int i = 0; i < meshes.size(); i++){
         ofPushMatrix();
         ofScale(length,length,length);
@@ -142,27 +146,4 @@ void ofxGrowth::drawMesh(){
     }
     
 //    drawDebug();
-}
-
-//--------------------------------------------------------------
-void ofxGrowth::drawDebug(){
-    for(int i = 0; i < nodes.size(); i++){
-        ofxGrowthNode * node = nodes[i];
-        ofVec3f location = node->parent->location;
-        ofVec3f growth = node->growth_vector;
-        float node_length = node->length;
-        
-        ofPushMatrix();
-        ofScale(length,length,length);
-        ofTranslate(location);
-        ofColor(255);
-        ofFill();
-//        ofDrawSphere(0,0,0.05);
-        ofNoFill();
-//        ofDrawCircle(0,0,0,node_length);
-//        ofDrawLine(0,0,0,growth.x,growth.y,growth.z);
-        ofDrawBitmapString("Length: " + ofToString(length), location);
-        ofDrawBitmapString("Growth: " + ofToString(growth), location.x, location.y + 0.04, location.z);
-        ofPopMatrix();
-    }
 }

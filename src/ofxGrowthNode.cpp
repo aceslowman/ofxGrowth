@@ -26,10 +26,9 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), 
     growthVectorRandom = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     
     growth_vector = ofVec3f(
-                            ofClamp(parent->growth_vector.x + (growthVectorRandom.x * tree.crookedness),-1.0,1.0),
-                            ofClamp(parent->growth_vector.y + (growthVectorRandom.y * tree.crookedness),-1.0,1.0),
-                            (b2d3d) ? ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0)
-                            : 0);
+        ofClamp(parent->growth_vector.x + (growthVectorRandom.x * tree.crookedness),-1.0,1.0),
+        ofClamp(parent->growth_vector.y + (growthVectorRandom.y * tree.crookedness),-1.0,1.0),
+        (b2d3d) ? ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0): 0);
 
     distance_from_center = parent->distance_from_center + 1;
     level              = lvl;

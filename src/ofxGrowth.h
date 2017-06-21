@@ -9,14 +9,11 @@ class ofxGrowth{
 public:
 
     void setup();
-    void setupMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id);
+
     
     void update();
-    void updateMesh(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id);
+
     void updateNodes(int l, ofVec3f gv);
-    
-    void drawMesh();
-    void drawDebug();
     
     int num_nodes;      //how many nodes are currently in the tree?
     int current_mesh_id;
@@ -26,6 +23,14 @@ public:
     
     ofxGrowth();
     ~ofxGrowth();
+    
+    /*
+     LINE DRAWING
+    */
+    void setupLines();
+    void createLines(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id);
+    void updateLines(ofxGrowthNode * current_node, ofVboMesh * current_mesh, int mesh_node_id);
+    void drawLines();
     
     /*
      TREE PARAMETERS

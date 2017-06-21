@@ -23,6 +23,7 @@ void ofApp::setup(){
     gui.add(movement_gui);
     updateTree();
     growth.setup();
+    growth.setupLines();
     
     ofAddListener(growth_gui.parameterChangedE(), this, &ofApp::onParamChange);
     ofAddListener(movement_gui.parameterChangedE(), this, &ofApp::onParamChange);
@@ -71,7 +72,7 @@ void ofApp::draw(){
         cam.orbit(ofGetElapsedTimef()*15, -10, 400);
         cam.move(0,100,0);
     }
-    growth.drawMesh();
+    growth.drawLines();
     drawEuler();
     cam.end();
     syphon.publishScreen();
@@ -100,55 +101,6 @@ void ofApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){
-    
-}
-
 void ofApp::drawEuler(){
     ofSetColor(ofColor(255,0,0));
     ofDrawLine(-100,0,0,100,0,0);
