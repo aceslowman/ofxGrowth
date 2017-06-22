@@ -22,11 +22,7 @@ ofxGrowth::~ofxGrowth(){
 //--------------------------------------------------------------
 void ofxGrowth::setupTree(){
     root = new ofxGrowthNode(*this);
-    num_nodes = 0;
-	ofLog(OF_LOG_NOTICE, "New tree has been set up");
 }
-
-
 
 //--------------------------------------------------------------
 void ofxGrowth::updateTree(){

@@ -2,17 +2,11 @@
 
 //--------------------------------------------------------------
 ofxGrowthMesh::ofxGrowthMesh(){
-    traversal_node = 0;
-    traversal_speed = 200;
-    
     stroke_width= 2.0;
-    
-    b_traverse = false;
 }
 
 ofxGrowthMesh::~ofxGrowthMesh(){
 	ofLog(OF_LOG_NOTICE, "Deleting meshes...");
-	meshes.clear();
 }
 
 //--------------------------------------------------------------
@@ -24,13 +18,8 @@ void ofxGrowthMesh::setup() {
 //--------------------------------------------------------------
 void ofxGrowthMesh::update() {
 	current_mesh_id = 0;
-	traversal_node = ofWrap(ofGetElapsedTimeMillis()/traversal_speed,0,node_max);
 
 	updateTree();
-
-	if(b_traverse){
-	    root->updateColor(ofGetElapsedTimeMillis()/traversal_speed);
-	}
 
 	ofSetLineWidth(stroke_width);
 	updateLines(root, meshes[0].get(), 0);
@@ -38,7 +27,7 @@ void ofxGrowthMesh::update() {
 
 //--------------------------------------------------------------
 void ofxGrowthMesh::setupLines() {
-	unique_ptr<ofVboMesh> mesh = make_unique<ofVboMesh>();
+	unique_ptr<ofVboMesh> mesh = make_unique<ofVboMesh>(); //why the hell?
 	mesh->setMode(OF_PRIMITIVE_LINE_STRIP);
 	ofSetLineWidth(stroke_width);
 
@@ -46,11 +35,6 @@ void ofxGrowthMesh::setupLines() {
 
 	createLines(root, meshes.back().get(), 0);
 
-	cap_current_mesh_id = 0;
-	cap_mesh_node_id = 0;
-	cap_current_mesh = meshes[0].get();
-	cap_current_node = root;
-	cap_mesh_node_id = 0;
 }
 
 //--------------------------------------------------------------
@@ -67,17 +51,15 @@ void ofxGrowthMesh::updateLines(ofxGrowthNode * current_node, ofVboMesh * curren
 			current_mesh->setVertex(mesh_node_id, current_node->location);
 			current_mesh->setColor(mesh_node_id, current_node->color);
 
-			mesh_node_id = 1;
-
 			current_node = current_node->children[i].get();
 
+			mesh_node_id = 1;
 			updateLines(current_node, current_mesh, mesh_node_id);
 		}
 		else {
-			mesh_node_id++;
-
 			current_node = current_node->children[i].get();
 
+			mesh_node_id++;
 			updateLines(current_node, current_mesh, mesh_node_id);
 		}
 	}
@@ -121,8 +103,6 @@ void ofxGrowthMesh::createLines(ofxGrowthNode * current_node, ofVboMesh * curren
 		nodes.push_back(current_node);
 
 		createLines(current_node, current_mesh, mesh_node_id);
-
-		num_nodes++;
 	}
 }
 

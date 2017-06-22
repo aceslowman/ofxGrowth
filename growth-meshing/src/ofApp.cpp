@@ -38,8 +38,7 @@ void ofApp::onParamChange(ofAbstractParameter& e) {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	if (b_traverse)
-		growth.update();
+
 }
 
 //--------------------------------------------------------------
@@ -54,8 +53,6 @@ void ofApp::updateTree() {
 	growth.crookedness = crookedness.get();
 	growth.growth_vector = growth_vector.get();
 	growth.stroke_width = stroke_width.get();
-	growth.traversal_speed = saw_1_rate.get();
-	growth.b_traverse = b_traverse.get();
 	growth.dim_f = diminish.get();
 	growth.b2d3d = b2d3d.get();
 }
@@ -66,7 +63,6 @@ void ofApp::draw() {
 
 	ofEnableAntiAliasing();
 	ofEnableSmoothing();
-	ofEnableAlphaBlending();
 	cam.begin();
 	if (!useEasyCam) {
 		cam.orbit(ofGetElapsedTimef() * 15, -10, 400);
@@ -75,7 +71,6 @@ void ofApp::draw() {
 	growth.drawLines();
 	drawEuler();
 	cam.end();
-	ofDisableAlphaBlending();
 	ofDisableSmoothing();
 	ofDisableAntiAliasing();
 
@@ -87,13 +82,11 @@ void ofApp::keyPressed(int key) {
 	if (key == 'd') {
 		ofLog(OF_LOG_NOTICE, "Creating new mesh...");
 
-		(&growth)->~ofxGrowthMesh();		//destroy growth
+		(&growth)->~ofxGrowthMesh();	//destroy growth
 		new(&growth) ofxGrowthMesh();	//create new growth
 
 		updateTree();
-
 		growth.setup();
-		growth.setupLines();
 	}
 	if (key == 'b') {
 		ofResetElapsedTimeCounter();

@@ -28,17 +28,14 @@ public:
     void generateChildren();
     void updateChildren();
     
-    ofColor setColor();
-    void updateColor();
-    
-    void updateColor(int driver);
-
-    float lengthRandom;
-    ofVec3f growthVectorRandom;    
+    ofColor setColor();  
     
     ofxGrowthNode(ofxGrowth &t);
     ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl);
     ~ofxGrowthNode();
 
 private:
+
+	float lengthRandom;
+	ofVec3f growthVectorRandom;
 };

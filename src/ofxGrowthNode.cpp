@@ -13,33 +13,28 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     level                = 0;
     growth_vector        = t.growth_vector;
     location             = tree.origin;
+    color				 = setColor();
     
-    color = setColor();
-    
-    generateChildren();
+	setup();
 }
 
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p, int lvl): tree(t), parent(p) {
+	isRoot = false;
     b2d3d  = tree.b2d3d;
-    lengthRandom = ofRandomuf();
+
+    lengthRandom		 = ofRandomuf();
+    growthVectorRandom	 = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     
-    growthVectorRandom = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
-    
-    growth_vector = ofVec3f(
+    growth_vector		 = ofVec3f(
         ofClamp(parent->growth_vector.x + (growthVectorRandom.x * tree.crookedness),-1.0,1.0),
         ofClamp(parent->growth_vector.y + (growthVectorRandom.y * tree.crookedness),-1.0,1.0),
         (b2d3d) ? ofClamp(parent->growth_vector.z + (growthVectorRandom.z * tree.crookedness),-1.0,1.0): 0);
 
     distance_from_center = parent->distance_from_center + 1;
-    level              = lvl;
-    
-    length = pow(tree.dim_f,level)*lengthRandom;
-    
-    location = parent->location + (growth_vector * length);
-    
-    color = setColor();
-    
-    isRoot = false;
+    level                = lvl;
+    length			     = pow(tree.dim_f,level)*lengthRandom;
+    location			 = parent->location + (growth_vector * length);
+    color				 = setColor();
     
     setup();
 }
@@ -78,23 +73,6 @@ void ofxGrowthNode::update(){
 }
 
 //--------------------------------------------------------------
-void ofxGrowthNode::updateColor(int driver){
-    float sine;
-    float alpha;
-    
-    //if(tree.b_traverse){
-    //    sine = (1.0 + sin(driver)) / 2.0;
-    //    alpha = 0.0 + (tree.traversal_node)/(distance_from_center + 1);
-    //}
-    
-    color = ofColor(setColor().r,setColor().g,setColor().b, alpha * 255);
-    
-    for (auto & child : children) {
-        child->updateColor(driver);
-    }
-}
-
-//--------------------------------------------------------------
 ofColor ofxGrowthNode::setColor(){
     ofColor c;
     
@@ -103,7 +81,7 @@ ofColor ofxGrowthNode::setColor(){
             c = ofColor(255,221,25,205); //yellowish
             break;
         case 1:
-            c = ofColor(143,177,178,205);//GRAY BLUE
+            c = ofColor(143,177,178,205);//gray blue
             break;
         case 2:
             c = ofColor(20,198,204,205); //blue
@@ -115,8 +93,7 @@ ofColor ofxGrowthNode::setColor(){
             c = ofColor(178,18,125,205); //dark pink
             break;
     }
-//    c = ofColor(255);
-    
+
     return c;
 }
 
